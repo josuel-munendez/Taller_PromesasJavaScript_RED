@@ -23,7 +23,9 @@ const PAGES = {
   'maquina-estados': 'Máquina de Estados',
   videos: 'Videos',
   reportes: 'Reportes',
-  geolocalizacion: 'Geolocalización'
+  geolocalizacion: 'Geolocalización',
+  contacto: 'Contacto',
+  dashboard: 'Dashboard'
 };
 
 // ================================================================
@@ -119,6 +121,7 @@ function loadPageData(page) {
     case 'videos': break;
     case 'reportes': break;
     case 'geolocalizacion': break;
+    case 'contacto': loadContactData(); break;
     default: break;
   }
 }
@@ -324,6 +327,59 @@ function loadSettledPosts() {
     })
     .catch(error => {
       showError('settled-posts', error.message);
+    });
+}
+
+// ================================================================
+// PAGINA CONTACTO — LISTA DE CONTACTOS DESDE LA API
+// ================================================================
+// Carga los usuarios de la API y los muestra como fichas de contacto
+// (nombre, empresa, telefono, correo y ciudad). Usa el mismo patron
+// fetch() -> .then() -> .map() que la lista de usuarios.
+function loadContactData() {
+  const container = document.getElementById('contact-list');
+  if (!container) return;
+
+  showLoading('contact-list', 'Cargando contactos...');
+
+  fetch(`${API}/users`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Error HTTP ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(users => {
+      const cards = users.map(user => `
+        <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold">
+              ${sanitizeHTML(user.name.charAt(0))}
+            </span>
+            <div>
+              <h4 class="font-bold text-white text-sm">${sanitizeHTML(user.name)}</h4>
+              <p class="text-xs text-slate-500">${sanitizeHTML(user.company.name)}</p>
+            </div>
+          </div>
+          <div class="space-y-1 text-xs text-slate-400">
+            <p>📞 ${sanitizeHTML(user.phone)}</p>
+            <p>✉️ ${sanitizeHTML(user.email)}</p>
+            <p>📍 ${sanitizeHTML(user.address.city)}, ${sanitizeHTML(user.address.zipcode)}</p>
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = cards;
+      const counter = document.getElementById('contact-count');
+      if (counter) {
+        counter.textContent = `${users.length} contactos cargados`;
+      }
+    })
+    .catch(error => {
+      showError('contact-list', error.message);
+    })
+    .finally(() => {
+      console.log('[Contacto] Carga de contactos finalizada.');
     });
 }
 

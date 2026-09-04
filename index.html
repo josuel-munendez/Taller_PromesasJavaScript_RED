@@ -48,6 +48,13 @@
       <a href="#geolocalizacion" data-page="geolocalizacion" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
         <span>📍</span> Geolocalización
       </a>
+      <div class="border-t border-slate-800 my-3"></div>
+      <a href="#contacto" data-page="contacto" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>📇</span> Contacto
+      </a>
+      <a href="#dashboard" data-page="dashboard" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>📈</span> Dashboard
+      </a>
     </nav>
     <div class="p-3 border-t border-slate-800">
       <button id="sidebar-toggle" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs text-slate-500 hover:text-white bg-slate-800 rounded-lg transition-colors">
@@ -289,6 +296,32 @@
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- CONTACTO -->
+      <section id="page-contacto" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-teal-500/10 text-teal-400 text-xs font-bold px-2 py-1 rounded">Sección</span>
+          <h2 class="text-xl font-bold">📇 Directorio de Contactos</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Contactos obtenidos desde la API (JSONPlaceholder) con el patrón fetch() + then() + map().</p>
+        <div id="contact-count" class="text-xs text-slate-500 mb-3"></div>
+        <div id="contact-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <p class="text-slate-500 col-span-full">Cargando contactos...</p>
+        </div>
+      </section>
+
+      <!-- DASHBOARD -->
+      <section id="page-dashboard" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-indigo-500/10 text-indigo-400 text-xs font-bold px-2 py-1 rounded">Sección</span>
+          <h2 class="text-xl font-bold">📈 Dashboard en vivo</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Métricas agregadas con <code class="bg-slate-800 px-1.5 py-0.5 rounded text-emerald-300">Promise.all</code> y autorefresco cada 30 segundos.</p>
+        <div id="dashboard-metrics" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <p class="text-slate-500 col-span-full">Cargando métricas...</p>
+        </div>
+        <div id="dashboard-status" class="text-xs text-slate-500 mt-3"></div>
       </section>
 
     </div>
