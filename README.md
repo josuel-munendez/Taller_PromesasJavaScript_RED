@@ -18,8 +18,10 @@ Proyecto educativo en formato Single Page Application (SPA) que demuestra los 7 
 | **Promise.any** | El primer éxito importa |
 | **Máquina de Estados** | UI reactiva con PENDING / FULFILLED / REJECTED |
 | **🎬 Videos** | Acceso a cámara con `getUserMedia()` + captura de fotos |
-| **📊 Reportes** | Genera y descarga reportes desde datos de API |
+| **📊 Reportes** | Genera y descarga reportes desde datos de API (incluye exportar CSV) |
 | **📍 Geolocalización** | Ubicación del usuario en mapa OpenStreetMap |
+| **📇 Contacto** | Directorio de contactos consumiendo `GET /users` con `fetch` + `map` |
+| **📈 Dashboard** | Métricas en vivo con `Promise.all` y autorefresco cada 30 s |
 
 ## 🚀 Quick Start
 
@@ -79,6 +81,17 @@ tutorial_promesas_api_gratis/
 ## 📝 Tutorial completo
 
 Consulta **[TUTORIAL.md](./TUTORIAL.md)** para la guía paso a paso con explicaciones, analogías y código comentado.
+
+## 🧑‍🤝‍🧑 Colaboradores y GitFlow
+
+Proyecto desarrollado en pareja siguiendo el flujo de trabajo **GitFlow**:
+
+| Rama | Autor | Alcance |
+|------|-------|---------|
+| `jose` | **josuel-munendez** | Promesas 1-4, página Contacto, teoría partes 1-2 y talleres 1-4 |
+| `manrique` | **ManriBOT** | Promesas 5-7, cámara, geolocalización, reportes CSV, Dashboard, teoría partes 3-6 |
+
+Flujo: `main` → `develop` → ramas `jose`/`manrique` → integración en `develop` y entrega en `main` con etiqueta semántica (`v1.0.0`).
 
 ## 📄 Licencia
 
