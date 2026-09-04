@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promesas API Gratuita — SPA Tutorial</title>
+  <link rel="stylesheet" href="./src/styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex">
+
+  <aside id="sidebar" class="w-64 min-h-screen bg-slate-900 border-r border-slate-800 fixed top-0 left-0 z-40 flex flex-col transition-transform duration-300 -translate-x-full">
+    <div class="p-5 border-b border-slate-800">
+      <h1 class="text-lg font-bold text-emerald-400">🚀 Promesas</h1>
+      <p class="text-xs text-slate-500 mt-1">SPA Tutorial</p>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-3 px-2 space-y-0.5" id="nav-menu">
+      <a href="#home" data-page="home" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>🏠</span> Inicio
+      </a>
+      <a href="#promise-basica" data-page="promise-basica" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>💊</span> Promise básica
+      </a>
+      <a href="#promise-array" data-page="promise-array" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>📋</span> Promise + array
+      </a>
+      <a href="#promise-all" data-page="promise-all" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>🔄</span> Promise.all
+      </a>
+      <a href="#promise-allsettled" data-page="promise-allsettled" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>✅</span> Promise.allSettled
+      </a>
+      <a href="#promise-race" data-page="promise-race" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>🏁</span> Promise.race
+      </a>
+      <a href="#promise-any" data-page="promise-any" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>🥇</span> Promise.any
+      </a>
+      <a href="#maquina-estados" data-page="maquina-estados" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>🎛️</span> Máquina de Estados
+      </a>
+      <div class="border-t border-slate-800 my-3"></div>
+      <a href="#videos" data-page="videos" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>🎬</span> Videos
+      </a>
+      <a href="#reportes" data-page="reportes" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>📊</span> Reportes
+      </a>
+      <a href="#geolocalizacion" data-page="geolocalizacion" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>📍</span> Geolocalización
+      </a>
+    </nav>
+    <div class="p-3 border-t border-slate-800">
+      <button id="sidebar-toggle" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs text-slate-500 hover:text-white bg-slate-800 rounded-lg transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        Cerrar menú
+      </button>
+    </div>
+  </aside>
+
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden"></div>
+
+  <main id="main-content" class="flex-1 min-h-screen transition-all duration-300">
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-10">
+      <div class="flex items-center justify-between px-4 py-3">
+         <button id="mobile-menu-btn" class="p-2 text-slate-400 hover:text-white">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <h2 id="page-title" class="text-lg font-bold text-emerald-400">🏠 Inicio</h2>
+        <div class="w-10"></div>
+      </div>
+    </header>
+
+    <div id="page-content" class="max-w-5xl mx-auto px-4 py-8 space-y-8">
+
+      <!-- HOME -->
+      <section id="page-home" class="page-section">
+        <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 mb-6">
+          <h2 class="text-2xl font-bold text-emerald-400 mb-2">Bienvenido al Tutorial de Promesas</h2>
+          <p class="text-slate-400">Este es un SPA educativo que demuestra los 7 patrones fundamentales de Promesas en JavaScript, más secciones de videos, reportes y geolocalización.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+            <h3 class="font-bold text-white mb-2">💊 Promise básica</h3>
+            <p class="text-sm text-slate-400">fetch() + .then() + .catch() + .finally()</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+            <h3 class="font-bold text-white mb-2">📋 Promise + array</h3>
+            <p class="text-sm text-slate-400">Renderizar lista con .map()</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+            <h3 class="font-bold text-white mb-2">🔄 Promise.all</h3>
+            <p class="text-sm text-slate-400">Peticiones en paralelo — todo o nada</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+            <h3 class="font-bold text-white mb-2">✅ Promise.allSettled</h3>
+            <p class="text-sm text-slate-400">Aísla fallos — nunca rechaza</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+            <h3 class="font-bold text-white mb-2">🏁 Promise.race</h3>
+            <p class="text-sm text-slate-400">El primero en terminar gana</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+            <h3 class="font-bold text-white mb-2">🥇 Promise.any</h3>
+            <p class="text-sm text-slate-400">El primer éxito importa</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+            <h3 class="font-bold text-white mb-2">🎛️ Máquina de Estados</h3>
+            <p class="text-sm text-slate-400">UI reactiva PENDING / FULFILLED / REJECTED</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+            <h3 class="font-bold text-white mb-2">🎬 Videos</h3>
+            <p class="text-sm text-slate-400">Consumo de cámara y video</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+            <h3 class="font-bold text-white mb-2">📊 Reportes</h3>
+            <p class="text-sm text-slate-400">Generar reportes desde datos de API</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+            <h3 class="font-bold text-white mb-2">📍 Geolocalización</h3>
+            <p class="text-sm text-slate-400">Ubicación del usuario en mapa</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROMISE BASICA -->
+      <section id="page-promise-basica" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2 py-1 rounded">Paso 1</span>
+          <h2 class="text-xl font-bold">Promise básica: Obtener 1 post</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Usamos <code class="bg-slate-800 px-1.5 py-0.5 rounded text-emerald-300">fetch()</code> que devuelve una Promise. Encadenamos <code class="bg-slate-800 px-1.5 py-0.5 rounded text-emerald-300">.then()</code> para procesar la respuesta.</p>
+        <div id="single-post" class="bg-slate-900 rounded-xl p-6 border border-slate-800">
+          <p class="text-slate-500">Cargando post...</p>
+        </div>
+      </section>
+
+      <!-- PROMISE ARRAY -->
+      <section id="page-promise-array" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-blue-500/10 text-blue-400 text-xs font-bold px-2 py-1 rounded">Paso 2</span>
+          <h2 class="text-xl font-bold">Promise + array: Lista de usuarios</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">La API devuelve un ARRAY de usuarios. Usamos .map() para transformar cada usuario en HTML.</p>
+        <div id="users-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <p class="text-slate-500 col-span-full">Cargando usuarios...</p>
+        </div>
+      </section>
+
+      <!-- PROMISE ALL -->
+      <section id="page-promise-all" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-purple-500/10 text-purple-400 text-xs font-bold px-2 py-1 rounded">Paso 3</span>
+          <h2 class="text-xl font-bold">Promise.all: Post + Autor + Comentarios</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Disparamos 3 peticiones en paralelo. Si una falla, todo falla. Es atómico: "todo o nada".</p>
+        <div id="combined-data" class="bg-slate-900 rounded-xl p-6 border border-slate-800">
+          <p class="text-slate-500">Cargando datos combinados...</p>
+        </div>
+      </section>
+
+      <!-- PROMISE ALLSETTLED -->
+      <section id="page-promise-allsettled" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-2 py-1 rounded">Paso 4</span>
+          <h2 class="text-xl font-bold">Promise.allSettled: 5 posts independientes</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Disparamos 5 peticiones. Si una falla, las demás siguen funcionando. Nunca rechaza.</p>
+        <div id="settled-posts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <p class="text-slate-500 col-span-full">Cargando posts...</p>
+        </div>
+      </section>
+
+      <!-- PROMISE RACE -->
+      <section id="page-promise-race" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-rose-500/10 text-rose-400 text-xs font-bold px-2 py-1 rounded">Paso 5</span>
+          <h2 class="text-xl font-bold">Promise.race: Carrera contra el tiempo</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Competimos: la petición a la API vs un temporizador de 2 segundos.</p>
+        <div id="race-result" class="bg-slate-900 rounded-xl p-6 border border-slate-800">
+          <p class="text-slate-500">Esperando resultado de la carrera...</p>
+        </div>
+      </section>
+
+      <!-- PROMISE ANY -->
+      <section id="page-promise-any" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-cyan-500/10 text-cyan-400 text-xs font-bold px-2 py-1 rounded">Paso 6</span>
+          <h2 class="text-xl font-bold">Promise.any: El primer servidor que responda</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Intentamos 3 endpoints. Nos quedamos con el primero que tenga éxito.</p>
+        <div id="any-result" class="bg-slate-900 rounded-xl p-6 border border-slate-800">
+          <p class="text-slate-500">Buscando el primer éxito...</p>
+        </div>
+      </section>
+
+      <!-- MAQUINA DE ESTADOS -->
+      <section id="page-maquina-estados" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-pink-500/10 text-pink-400 text-xs font-bold px-2 py-1 rounded">Paso 7</span>
+          <h2 class="text-xl font-bold">Máquina de Estados: Buscar posts por usuario</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Input de búsqueda con estados visuales: <span class="text-yellow-400">PENDING</span> → <span class="text-green-400">FULFILLED</span> o <span class="text-red-400">REJECTED</span>.</p>
+        <div class="bg-slate-900 rounded-xl p-6 border border-slate-800">
+          <div class="flex gap-2 mb-4">
+            <input type="number" id="user-id-input" placeholder="ID de usuario (1-10)" min="1" max="10"
+                   class="flex-grow px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <button id="search-btn" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg transition-colors flex items-center gap-2">
+              <span id="btn-text">Buscar</span>
+              <svg id="btn-spinner" class="hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+            </button>
+          </div>
+          <div id="search-status" class="hidden mb-3 p-3 rounded-lg text-sm font-medium"></div>
+          <div id="search-results" class="space-y-2"></div>
+        </div>
+      </section>
+
+      <!-- VIDEOS -->
+      <section id="page-videos" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-rose-500/10 text-rose-400 text-xs font-bold px-2 py-1 rounded">Sección</span>
+          <h2 class="text-xl font-bold">🎬 Consumo de Video</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Accede a la cámara del dispositivo y captura frames usando <code class="bg-slate-800 px-1.5 py-0.5 rounded text-emerald-300">getUserMedia()</code> que devuelve una Promise.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="bg-slate-900 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-bold text-white mb-3">Vista previa de cámara</h3>
+            <video id="video-preview" class="w-full rounded-lg bg-slate-800" autoplay playsinline></video>
+            <div class="flex gap-2 mt-3">
+              <button id="start-camera" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg text-sm transition-colors">Iniciar cámara</button>
+              <button id="stop-camera" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-lg text-sm transition-colors hidden">Detener</button>
+              <button id="capture-photo" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg text-sm transition-colors hidden">Capturar foto</button>
+            </div>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-bold text-white mb-3">Foto capturada</h3>
+            <canvas id="photo-canvas" class="w-full rounded-lg bg-slate-800 hidden"></canvas>
+            <div id="photo-status" class="text-slate-500 text-sm">No hay foto capturada</div>
+            <div class="mt-3 space-y-2">
+              <div id="video-info" class="text-xs text-slate-500 space-y-1"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPORTES -->
+      <section id="page-reportes" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-indigo-500/10 text-indigo-400 text-xs font-bold px-2 py-1 rounded">Sección</span>
+          <h2 class="text-xl font-bold">📊 Generador de Reportes</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Genera un reporte con los datos obtenidos de la API. Puedes descargarlo como archivo de texto o imprimirlo.</p>
+        <div class="bg-slate-900 rounded-xl p-6 border border-slate-800">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <button id="gen-report-users" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg text-sm transition-colors">Reporte de Usuarios</button>
+            <button id="gen-report-posts" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-lg text-sm transition-colors">Reporte de Posts</button>
+            <button id="gen-report-combined" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg text-sm transition-colors">Reporte Combinado</button>
+            <button id="download-report" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg text-sm transition-colors hidden">⬇ Descargar Reporte</button>
+            <button id="print-report" class="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white font-semibold rounded-lg text-sm transition-colors hidden">🖨 Imprimir</button>
+          </div>
+          <div id="report-preview" class="bg-slate-800/50 rounded-lg p-4 text-sm text-slate-300 font-mono max-h-96 overflow-y-auto">
+            <p class="text-slate-500">Haz clic en un botón para generar un reporte...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- GEOLOCALIZACION -->
+      <section id="page-geolocalizacion" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-teal-500/10 text-teal-400 text-xs font-bold px-2 py-1 rounded">Sección</span>
+          <h2 class="text-xl font-bold">📍 Geolocalización</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Obtén la ubicación del usuario usando la API de geolocalización del navegador. Muestra la posición en un mapa de OpenStreetMap.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 space-y-4">
+            <button id="get-location" class="w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg text-sm transition-colors">Obtener ubicación</button>
+            <div id="geo-info" class="space-y-2 text-sm">
+              <p class="text-slate-500">No se ha obtenido ubicación aún.</p>
+            </div>
+            <div id="geo-error" class="hidden p-3 bg-red-950/40 border border-red-800/60 rounded-lg text-red-400 text-sm"></div>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-bold text-white mb-3">Mapa</h3>
+            <div id="map-container" class="rounded-lg overflow-hidden bg-slate-800" style="height: 300px;">
+              <iframe id="map-frame" class="w-full h-full border-0" src="about:blank" title="Mapa de ubicación"></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="bg-slate-900 border-t border-slate-800 py-6 mt-10">
+      <div class="max-w-5xl mx-auto px-4 text-center text-sm text-slate-600">
+        <p>Tutorial educativo — Promesas JavaScript + Tailwind CSS local + API gratuita</p>
+      </div>
+    </footer>
+  </main>
+
+  <script src="./src/app.js"></script>
+</body>
+</html>

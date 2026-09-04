@@ -1,0 +1,10 @@
+# Dependencias
+node_modules/
+
+# Logs y artefactos
+*.log
+.DS_Store
+Thumbs.db
+
+# Archivos generados por Pandoc
+*.docx
