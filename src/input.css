@@ -4,7 +4,21 @@
 
 @layer base {
   :root {
+    -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+  }
+
+  button,
+  input[type='button'],
+  input[type='reset'],
+  input[type='submit'] {
+    -webkit-appearance: button;
+    appearance: button;
+  }
+
+  input[type='search'] {
+    -webkit-appearance: textfield;
+    appearance: textfield;
   }
 }
 

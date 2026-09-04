@@ -10,7 +10,7 @@ Muestra el sistema como una caja negra y sus actores/sistemas externos.
 
 ```mermaid
 flowchart LR
-    U[👤 Usuario / Estudiante] -->|navega por hash| SPA[SPA de Promesas\n(Sistema)]
+    U[👤 Usuario / Estudiante] -->|navega por hash| SPA["SPA de Promesas\n(Sistema)"]
     SPA -->|fetch() HTTP| JP[JSONPlaceholder\nAPI REST de pruebas]
     SPA -->|geolocalización| NAV[API Geo del Navegador]
     SPA -->|href iframe| OSM[OpenStreetMap\nmapa embebido]
@@ -35,13 +35,13 @@ Muestra los contenedores (piezas ejecutables) que forman el sistema.
 ```mermaid
 flowchart TB
     subgraph Cliente[Navegador Web]
-        H[📄 index.html\nContenedor: SPA (estático)]
+        H["📄 index.html\nContenedor: SPA (estático)"]
         CSS[🎨 styles.css\nTailwind compilado]
         JS[⚙️ app.js\nLógica de la SPA y Promesas]
     end
     H --> CSS
     H --> JS
-    JS -->|fetch| API[(JSONPlaceholder\nAPI externa)]
+    JS -->|fetch| API[("JSONPlaceholder\nAPI externa")]
     JS -->|getUserMedia| CAM[(Cámara)]
     JS -->|geolocation| GEO[(API Geo)]
     JS -->|iframe| OSM[(OpenStreetMap)]

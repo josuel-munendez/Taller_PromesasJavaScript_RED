@@ -94,7 +94,7 @@ Pipeline funcional de los datos:
 
 ```mermaid
 flowchart LR
-    API[fetch API] -->|?limit=(5/10/15/20)| JSON[JSON]
+    API[fetch API] -->|"?limit=(5/10/15/20)"| JSON[JSON]
     JSON --> F[filas estructuradas rows/headers]
     F --> TXT[texto plano para preview]
     F --> CSV[csvCell + rowsToCsv → Blob .csv]
