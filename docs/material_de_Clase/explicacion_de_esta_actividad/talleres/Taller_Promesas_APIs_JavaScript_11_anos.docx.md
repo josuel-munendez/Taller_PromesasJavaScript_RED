@@ -469,3 +469,61 @@ Construye una pequeña aplicación que reúna todo lo aprendido.
 ⭐ 1 punto: respondió las preguntas.
 
 Total: 5 puntos por taller.
+
+---
+
+# 🟢 SOLUCIONES TALLERES 5–11 (autor: rama `manrique` — ManriBOT)
+
+> Talleres 1-4 resueltos por la rama `jose`. Aquí se resuelven los talleres
+> 5 a 11, referenciando su implementación en `src/app.js` e `index.html`.
+
+## 🟣 TALLER 5 — Promise.race() (implementado en `loadRaceResult`)
+**Preguntas**
+- **¿Qué significa "gana la API"?** La petición `fetch()` resuelve antes que el temporizador; se muestra el post.
+- **¿Qué significa "gana el timeout"?** El temporizador de 2 s termina primero y hace `reject`, por lo que se muestra el aviso de tiempo agotado.
+**Reto** (1, 3 y 5 segundos): basta cambiar el `2000` de `setTimeout` en `loadRaceResult()`.
+
+## 🥇 TALLER 6 — Promise.any() (implementado en `loadAnyResult`)
+**Preguntas**
+- **¿Qué diferencia hay entre race y any?** `race` resuelve con la **primera** en terminar (aunque falle); `any` resuelve con la **primera que tenga éxito**.
+- **¿Qué ocurre si todas las opciones fallan?** `Promise.any` rechaza con un `AggregateError` y se muestra el mensaje de error.
+**Reto** (1 o 2 peticiones fallan): con endpoints inválidos, `any` elige el que sí responde.
+
+## 🎛️ TALLER 7 — LA MÁQUINA DE ESTADOS (implementado en `initSearchIfNeeded`)
+**Preguntas**
+- **¿Qué estado aparece mientras esperamos?** `PENDING`.
+- **¿Qué estado aparece cuando todo sale bien?** `FULFILLED`.
+- **¿Qué estado aparece cuando hay un error?** `REJECTED`.
+**Reto** (mensaje por estado): la UI cambia color y texto para cada estado (`#search-status`).
+
+## ⏳ TALLER 8 — async Y await (implementado en `loadUserWithTodos` y reportes)
+**Preguntas**
+- **¿Qué significa `async`?** Marca una función como asíncrona; siempre devuelve una Promise.
+- **¿Qué significa `await`?** Pausa la función hasta que la Promise se resuelva, sin bloquear la página.
+- **¿Qué ventaja tiene `try/catch`?** Permite capturar errores de forma legible y alternativa al `.catch()`.
+**Reto** (contraponer "cuando termine haz esto" vs "espera el resultado"): `.then()` encadena acciones tras terminar; `await` espera el valor directamente.
+
+## 🎥 TALLER 9 — ENCENDER LA CÁMARA (implementado en `initVideos`)
+**Preguntas**
+- **¿Por qué el navegador pide permiso?** Porque la cámara es un recurso sensible del dispositivo y solo se activa con tu consentimiento.
+- **¿Qué ocurre si elegimos No permitir?** `getUserMedia` rechaza la Promise y se muestra el error en `#photo-status`.
+- **¿Por qué debemos apagar la cámara?** Para no gastar recursos del dispositivo y libertar el sensor y la luz del micrófono.
+**Reto** (la cámara es un recurso privado): captura imágenes de tu entorno sin tu conocimiento, por eso se protege con permiso.
+
+## 📊 TALLER 10 — CREAR UN REPORTE (implementado en `initReports` + CSV)
+**Preguntas**
+- **¿Qué información debería tener un reporte?** Datos organizados (nombre, correo, etc.), cabecera, y la fecha de generación.
+- **¿Para qué sirve la fecha de generación?** Para saber cuándo se obtuvieron los datos y si siguen vigentes.
+**Reto** (fecha y hora): se incluye `timestamp` en la cabecera del reporte y se añade el tiempo de generación en `#report-time`.
+
+## 📍 TALLER 11 — MI UBICACIÓN (implementado en `initGeolocation`)
+**Preguntas**
+- **¿Por qué se necesita permiso?** Porque la ubicación revela dónde estás y es información privada protegida.
+- **¿Por qué la ubicación es información privada?** Porque puede servir para rastrearte o ubicar tu casa/escuela.
+**Reto** (no compartir la ubicación con desconocidos): nunca reveles tu posición a extraños; las apps deben pedirte permiso explícito.
+
+---
+
+# 🏆 RETO FINAL — SUPER EXPLORADOR DE APIS
+
+Todos los módulos 1-10 del reto final están implementados y funcionando en la SPA (Módulo 1: `loadSinglePost`; 2: `loadUsersList`; 3: `loadCombinedData`; 4: `loadSettledPosts`; 5: `loadRaceResult`; 6: `loadAnyResult`; 7: buscador `initSearchIfNeeded`; 8: `initVideos`; 9: `initReports`; 10: `initGeolocation`).
