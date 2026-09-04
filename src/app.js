@@ -123,6 +123,63 @@ function loadPageData(page) {
   }
 }
 
+// ================================================================
+// PROMESA 1: PROMISE BASICA — CARGAR VARIOS POSTS
+// ================================================================
+// Demuestra el patron basico de una Promise con fetch() y la cadena
+// .then()/.catch()/.finally(). Segun el taller (Parte 2.2) carga los
+// posts con IDs 1, 3 y 5 usando Promise.allSettled para aislar cada
+// fallo por post. Si ninguno tiene exito muestra el aviso global
+// "No se pudieron cargar los posts".
+function loadSinglePost() {
+  const postIds = [1, 3, 5];
+  const container = document.getElementById('single-post');
+  if (!container) return;
+
+  showLoading('single-post', 'Cargando posts...');
+
+  const requests = postIds.map(id =>
+    fetch(`${API}/posts/${id}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Post ${id}: error HTTP ${response.status}`);
+        }
+        return response.json();
+      })
+  );
+
+  Promise.allSettled(requests)
+    .then(results => {
+      const successful = results.filter(result => result.status === 'fulfilled');
+
+      if (successful.length === 0) {
+        container.innerHTML = '<p class="text-red-400">No se pudieron cargar los posts</p>';
+        return;
+      }
+
+      container.innerHTML = results.map((result, index) => {
+        if (result.status === 'fulfilled') {
+          const post = result.value;
+          return `
+            <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 mb-3">
+              <h4 class="text-lg font-bold text-emerald-400 mb-2">${sanitizeHTML(post.title)}</h4>
+              <p class="text-slate-300 text-sm leading-relaxed">${sanitizeHTML(post.body)}</p>
+              <span class="inline-block mt-3 text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">
+                Post ID: ${post.id} | Autor ID: ${post.userId}
+              </span>
+            </div>`;
+        }
+        return `<p class="text-red-400 text-sm">Post ID ${postIds[index]}: no se pudo cargar.</p>`;
+      }).join('');
+    })
+    .catch(error => {
+      showError('single-post', error.message);
+    })
+    .finally(() => {
+      console.log('[Paso 1] Promesa basica completada: ', postIds.length, 'posts procesados.');
+    });
+}
+
 
 // ================================================================
 // REPORTES
