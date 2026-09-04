@@ -280,6 +280,53 @@ function loadCombinedData() {
     });
 }
 
+// ================================================================
+// PROMESA 4: PROMISE.ALLSETTLED — 5 POSTS INDEPENDIENTES
+// ================================================================
+// Promise.allSettled NUNCA rechaza: espera a que cada peticion llegue a
+// un estado final y devuelve un arreglo con 'fulfilled' o 'rejected'.
+// Por eso aislar el fallo de un post no detiene el renderizado de los demas.
+function loadSettledPosts() {
+  const container = document.getElementById('settled-posts');
+  if (!container) return;
+
+  showLoading('settled-posts', 'Cargando posts...');
+
+  const postIds = [1, 2, 3, 4, 5];
+
+  const requests = postIds.map(id =>
+    fetch(`${API}/posts/${id}`)
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+  );
+
+  Promise.allSettled(requests)
+    .then(results => {
+      container.innerHTML = results.map((result, index) => {
+        if (result.status === 'fulfilled') {
+          const post = result.value;
+          return `
+            <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 hover:border-slate-700 transition-all">
+              <span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded mb-2 inline-block">✔ cargo</span>
+              <h4 class="font-bold text-white text-sm mb-1">${sanitizeHTML(post.title)}</h4>
+              <p class="text-slate-400 text-xs">${sanitizeHTML(post.body.substring(0, 80))}...</p>
+            </div>`;
+        }
+        return `
+          <div class="bg-red-950/30 rounded-xl p-4 border border-red-800/60">
+            <span class="text-xs text-red-400 bg-red-500/10 px-2 py-0.5 rounded mb-2 inline-block">✖ fallo</span>
+            <p class="text-red-400 text-sm">Post ID ${postIds[index]}</p>
+            <p class="text-red-500/70 text-xs mt-1">${sanitizeHTML(result.reason.message)}</p>
+          </div>`;
+      }).join('');
+    })
+    .catch(error => {
+      showError('settled-posts', error.message);
+    });
+}
+
 
 // ================================================================
 // REPORTES
