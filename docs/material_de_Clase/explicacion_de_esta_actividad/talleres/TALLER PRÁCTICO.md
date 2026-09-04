@@ -278,3 +278,102 @@ const UI\_STATE \= {
 3. Documento con las respuestas a las preguntas teóricas  
 4. **Opcional**: Captura de pantalla del dashboard funcionando
 
+---
+
+# 🟢 SOLUCIONES DEL TALLER
+
+> Las respuestas teóricas y las referencias a las implementaciones en `app.js`/`index.html`.
+> Cada parte se resuelve a medida que se implementa en el SPA. Se indica autor (rama) de cada bloque.
+
+## ✅ PARTE 1: CONFIGURACIÓN Y NAVEGACIÓN — Solución
+
+### Pregunta 1.1 — Variables de navegación SPA
+
+```javascript
+// API principal usada por todas las peticiones fetch()
+const API = 'https://jsonplaceholder.typicode.com';
+
+const PAGES = {
+  home: 'Inicio',
+  'promise-basica': 'Promise básica',
+  'promise-array': 'Promise + array',
+  'promise-all': 'Promise.all',
+  'promise-allsettled': 'Promise.allSettled',
+  'promise-race': 'Promise.race',
+  'promise-any': 'Promise.any',
+  'maquina-estados': 'Máquina de Estados',
+  videos: 'Videos',
+  reportes: 'Reportes',
+  geolocalizacion: 'Geolocalización',
+  contacto: 'Contacto',
+  dashboard: 'Dashboard'
+};
+
+// Devuelve la página actual leyendo el hash de la URL; si no hay hash
+// asume 'home'. Es la "fuente de verdad" de la navegación por hash.
+function getPageFromHash() {
+  const hash = window.location.hash.replace('#', '') || 'home';
+  return hash;
+}
+```
+
+**Explicación de `getPageFromHash()`:** lee `window.location.hash`, le quita el carácter `#` inicial y, si la URL no trae hash (por ejemplo al entrar por primera vez), devuelve `'home'` como valor por defecto. Toda la navegación de la SPA depende de este valor.
+
+### Pregunta 1.2 — Funcionamiento de la navegación SPA
+
+**1. ¿Qué es el hash en una URL y por qué se usa en SPA?**
+
+El **hash** es la parte de la URL que va después del símbolo `#` (p. ej. `#promise-all`). No se envía al servidor y **no recarga la página** al cambiar. Por eso es ideal para SPAs: permite tener "rutas" (indicadores de estado) manipulables con el botón *atrás/adelante* del navegador, sin volver a pedir el documento al servidor. Al cambiar el hash se dispara el evento `hashchange`, que la SPA escucha para mostrar la sección correspondiente.
+
+**2. ¿Cómo se actualiza el título de la página dinámicamente?**
+
+`updatePageTitle()` busca el elemento `<h2 id="page-title">`, consulta la página activa con `getPageFromHash()`, busca su nombre en el objeto `PAGES` y asigna ese texto con `titleEl.textContent = title;`. Cuando cambia el hash, `handleRoute()` llama a `updatePageTitle()` para refrescar el encabezado.
+
+### Pregunta 1.3 — Página "Contacto" (implementada ✅)
+
+Se implementó completa en `index.html` y `src/app.js`:
+
+1. **Entrada en `PAGES`**: `contacto: 'Contacto'`.
+2. **Sección HTML**: `<section id="page-contacto">` con un grid y el contenedor `#contact-list`.
+3. **Enlace en el menú**: `<a href="#contacto" data-page="contacto">📇 Contacto</a>`.
+4. **Función `loadContactData()`**: consume `GET /users` con `fetch()` y renderiza fichas de contacto mediante `.map()`, mostrando además un contador `#contact-count`.
+
+## ✅ PARTE 2: PROMESAS BÁSICAS — Solución
+
+### Pregunta 2.1 — Análisis de `loadSinglePost()`
+
+1. **¿Qué método de Promise se está utilizando?** En la implementación final se usa el patrón de cadena de una Promise: `fetch()` devuelve una Promise y se encadenan `.then()`, `.catch()` y `.finally()`. Además, para cargar varios posts de forma independiente se combina con `Promise.allSettled()` (ver 2.2).
+2. **¿Cómo se maneja el error?** Con el bloque `.catch()`. Dentro del `.then()` también se lanza un `Error` manual si `!response.ok`, para que el `catch` central capture fallos HTTP (no solo de red).
+3. **¿Qué hace el método `.finally()`?** Se ejecuta siempre, haya éxito o error. Aquí se usa para registrar en consola el fin del proceso. Es ideal para limpiar indicadores de carga.
+4. **Flujo de datos:** `fetch(URL)` → la API responde → `.then()` comprueba `response.ok` → `response.json()` convierte el cuerpo a objeto JS → se procesa el objeto y se inyecta en el DOM (innerHTML). Si algo falla en cualquier paso, salta al `.catch()`.
+
+### Pregunta 2.2 — Modificación a 3 posts (implementada ✅)
+
+Se modificó `loadSinglePost()` para:
+
+1. **Cargar 3 posts (IDs 1, 3 y 5)** con `const postIds = [1, 3, 5]`.
+2. **Lista vertical** (cada post es un bloque apilado con `mb-3`).
+3. **Error específico por post**: se usa `Promise.allSettled()` sobre el arreglo de peticiones. Cada resultado con `status === 'rejected'` se muestra como "Post ID X: no se pudo cargar." sin detener el renderizado de los que sí cargaron.
+4. **Requerimiento especial**: si `successful.length === 0` (ninguno se cumplió) se muestra **"No se pudieron cargar los posts"**.
+
+```javascript
+// Núcleo de la solución
+const requests = postIds.map(id =>
+  fetch(`${API}/posts/${id}`).then(response => {
+    if (!response.ok) throw new Error(`Post ${id}: error HTTP ${response.status}`);
+    return response.json();
+  })
+);
+Promise.allSettled(requests).then(results => {
+  const successful = results.filter(r => r.status === 'fulfilled');
+  if (successful.length === 0) {
+    container.innerHTML = '<p class="text-red-400">No se pudieron cargar los posts</p>';
+    return;
+  }
+  // ... render de cada resultado (fulfilled o rejected)
+});
+```
+
+> **Autor:** rama `jose` (josuel-munendez). Arrastrado a `develop` y `main` en la integración GitFlow.
+
+
