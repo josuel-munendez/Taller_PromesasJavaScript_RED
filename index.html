@@ -48,6 +48,10 @@
       <a href="#geolocalizacion" data-page="geolocalizacion" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
         <span>📍</span> Geolocalización
       </a>
+      <div class="border-t border-slate-800 my-3"></div>
+      <a href="#dashboard" data-page="dashboard" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
+        <span>📈</span> Dashboard
+      </a>
     </nav>
     <div class="p-3 border-t border-slate-800">
       <button id="sidebar-toggle" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs text-slate-500 hover:text-white bg-slate-800 rounded-lg transition-colors">
@@ -309,6 +313,19 @@
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- DASHBOARD -->
+      <section id="page-dashboard" class="page-section hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="bg-indigo-500/10 text-indigo-400 text-xs font-bold px-2 py-1 rounded">Desafío final</span>
+          <h2 class="text-xl font-bold">📈 Dashboard en vivo</h2>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">Métricas agregadas con <code class="bg-slate-800 px-1.5 py-0.5 rounded text-emerald-300">Promise.all</code>, top 3 de usuarios y un post aleatorio. Autorefresco cada 30 segundos.</p>
+        <div id="dashboard-metrics" class="bg-slate-900 rounded-xl p-5 border border-slate-800">
+          <p class="text-slate-500">Cargando métricas...</p>
+        </div>
+        <div id="dashboard-status" class="text-xs text-slate-500 mt-3"></div>
       </section>
 
     </div>

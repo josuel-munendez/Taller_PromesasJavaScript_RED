@@ -23,7 +23,8 @@ const PAGES = {
   'maquina-estados': 'Máquina de Estados',
   videos: 'Videos',
   reportes: 'Reportes',
-  geolocalizacion: 'Geolocalización'
+  geolocalizacion: 'Geolocalización',
+  dashboard: 'Dashboard'
 };
 
 // ================================================================
@@ -119,6 +120,7 @@ function loadPageData(page) {
     case 'videos': break;
     case 'reportes': break;
     case 'geolocalizacion': break;
+    case 'dashboard': initDashboard(); break;
     default: break;
   }
 }
@@ -408,6 +410,115 @@ function loadUserWithTodos() {
       resultsEl.innerHTML = `<p class="text-red-400">${sanitizeHTML(error.message)}</p>`;
     }
   });
+}
+
+// ================================================================
+// DESAFÍO FINAL (BONUS): DASHBOARD DE USUARIOS
+// ================================================================
+// Combina varias metricas con Promise.all(), muestra el top 3 de
+// usuarios con mas posts y un post aleatorio, y se autorefresca cada
+// 30 segundos con una pequena maquina de estados de carga.
+const DASHBOARD_STATE = Object.freeze({
+  IDLE: 'IDLE',
+  PENDING: 'PENDING',
+  FULFILLED: 'FULFILLED',
+  REJECTED: 'REJECTED'
+});
+
+let dashboardTimer = null;
+
+function loadDashboardData() {
+  const metricsEl = document.getElementById('dashboard-metrics');
+  const statusEl = document.getElementById('dashboard-status');
+  if (!metricsEl) return;
+
+  // Marca el estado PENDING mientras se cargan las metricas.
+  dashboardState = DASHBOARD_STATE.PENDING;
+  if (statusEl) statusEl.textContent = '⏳ Actualizando métricas...';
+
+  // Obtenemos todos los datos en paralelo con Promise.all.
+  Promise.all([
+    fetch(`${API}/users`).then(r => { if (!r.ok) throw new Error('users'); return r.json(); }),
+    fetch(`${API}/posts`).then(r => { if (!r.ok) throw new Error('posts'); return r.json(); }),
+    fetch(`${API}/comments`).then(r => { if (!r.ok) throw new Error('comments'); return r.json(); }),
+    fetch(`${API}/albums`).then(r => { if (!r.ok) throw new Error('albums'); return r.json(); })
+  ])
+    .then(([users, posts, comments, albums]) => {
+      dashboardState = DASHBOARD_STATE.FULFILLED;
+
+      // Top 3 usuarios con mas posts.
+      const countByUserId = posts.reduce((acc, post) => {
+        acc[post.userId] = (acc[post.userId] || 0) + 1;
+        return acc;
+      }, {});
+      const topUsers = [...users]
+        .sort((a, b) => (countByUserId[b.id] || 0) - (countByUserId[a.id] || 0))
+        .slice(0, 3);
+
+      // Un post aleatorio destacado.
+      const featured = posts[Math.floor(Math.random() * posts.length)];
+      const featuredAuthor = users.find(u => u.id === featured.userId);
+
+      const cards = [
+        { label: 'Usuarios', value: users.length, color: 'text-emerald-400' },
+        { label: 'Posts', value: posts.length, color: 'text-purple-400' },
+        { label: 'Comentarios', value: comments.length, color: 'text-blue-400' },
+        { label: 'Álbumes', value: albums.length, color: 'text-amber-400' }
+      ];
+
+      metricsEl.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          ${cards.map(card => `
+            <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 text-center">
+              <p class="text-3xl font-bold ${card.color}">${card.value}</p>
+              <p class="text-xs text-slate-400 mt-1 uppercase tracking-wide">${card.label}</p>
+            </div>
+          `).join('')}
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800">
+            <h3 class="font-bold text-white mb-3">🏆 Top 3 usuarios con más posts</h3>
+            <div class="space-y-2">
+              ${topUsers.map((u, i) => `
+                <div class="flex items-center justify-between bg-slate-800/50 rounded-lg p-3">
+                  <span class="text-sm text-slate-300">${i + 1}. ${sanitizeHTML(u.name)}</span>
+                  <span class="text-xs font-bold text-emerald-400">${countByUserId[u.id] || 0} posts</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800">
+            <h3 class="font-bold text-white mb-3">⭐ Post aleatorio destacado</h3>
+            <p class="text-emerald-400 font-semibold mb-1">${sanitizeHTML(featured.title)}</p>
+            <p class="text-slate-400 text-sm">${sanitizeHTML(featured.body.substring(0, 140))}...</p>
+            <p class="text-xs text-slate-500 mt-3">✍ ${sanitizeHTML(featuredAuthor ? featuredAuthor.name : 'Desconocido')}</p>
+          </div>
+        </div>`;
+
+      if (statusEl) {
+        statusEl.textContent = `✔ Actualizado ${new Date().toLocaleTimeString()} (refresco cada 30 s)`;
+      }
+    })
+    .catch(error => {
+      dashboardState = DASHBOARD_STATE.REJECTED;
+      metricsEl.innerHTML = `<p class="text-red-400">Error al cargar las métricas: ${sanitizeHTML(error.message)}</p>`;
+      if (statusEl) statusEl.textContent = '✖ Falló la actualización';
+    });
+}
+
+let dashboardState = DASHBOARD_STATE.IDLE;
+
+function initDashboard() {
+  const metricsEl = document.getElementById('dashboard-metrics');
+  if (!metricsEl) return;
+
+  // Carga inicial.
+  loadDashboardData();
+
+  // Autorefresco cada 30 segundos (solo se configura una vez).
+  if (!dashboardTimer) {
+    dashboardTimer = setInterval(loadDashboardData, 30000);
+  }
 }
 
 
