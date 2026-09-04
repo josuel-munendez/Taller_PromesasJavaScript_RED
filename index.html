@@ -263,15 +263,24 @@
           <span class="bg-indigo-500/10 text-indigo-400 text-xs font-bold px-2 py-1 rounded">Sección</span>
           <h2 class="text-xl font-bold">📊 Generador de Reportes</h2>
         </div>
-        <p class="text-slate-400 text-sm mb-4">Genera un reporte con los datos obtenidos de la API. Puedes descargarlo como archivo de texto o imprimirlo.</p>
+        <p class="text-slate-400 text-sm mb-4">Genera un reporte con los datos obtenidos de la API. Puedes descargarlo como archivo de texto o exportarlo a CSV.</p>
         <div class="bg-slate-900 rounded-xl p-6 border border-slate-800">
-          <div class="flex flex-wrap gap-2 mb-4">
+          <div class="flex flex-wrap items-center gap-2 mb-4">
+            <label class="text-xs text-slate-400 mr-1" for="report-limit">Registros:</label>
+            <select id="report-limit" class="px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+            </select>
             <button id="gen-report-users" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg text-sm transition-colors">Reporte de Usuarios</button>
             <button id="gen-report-posts" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-lg text-sm transition-colors">Reporte de Posts</button>
             <button id="gen-report-combined" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg text-sm transition-colors">Reporte Combinado</button>
             <button id="download-report" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg text-sm transition-colors hidden">⬇ Descargar Reporte</button>
+            <button id="export-csv" class="px-4 py-2 bg-green-700 hover:bg-green-600 text-white font-semibold rounded-lg text-sm transition-colors hidden">↧ Exportar a CSV</button>
             <button id="print-report" class="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white font-semibold rounded-lg text-sm transition-colors hidden">🖨 Imprimir</button>
           </div>
+          <div id="report-time" class="text-xs text-slate-500 mb-2"></div>
           <div id="report-preview" class="bg-slate-800/50 rounded-lg p-4 text-sm text-slate-300 font-mono max-h-96 overflow-y-auto">
             <p class="text-slate-500">Haz clic en un botón para generar un reporte...</p>
           </div>

@@ -423,16 +423,61 @@ function initReports() {
   const genCombinedBtn = document.getElementById('gen-report-combined');
   const downloadBtn = document.getElementById('download-report');
   const printBtn = document.getElementById('print-report');
+  const exportCsvBtn = document.getElementById('export-csv');
+  const limitSelect = document.getElementById('report-limit');
+  const timeEl = document.getElementById('report-time');
   const previewEl = document.getElementById('report-preview');
 
   if (!genUsersBtn) return;
 
-  function renderReport(title, lines) {
+  // Filas actuales en forma estructurada (para exportar a CSV).
+  let currentRows = [];
+
+  // Devuelve la cantidad de registros elegida en el selector (5, 10, 15, 20).
+  function selectedLimit() {
+    return Number(limitSelect ? limitSelect.value : 5);
+  }
+
+  // Muestra el tiempo de generacion medido con performance.now().
+  function showElapsed(start) {
+    if (timeEl) {
+      timeEl.textContent = `⏱ Tiempo de generación: ${(performance.now() - start).toFixed(1)} ms`;
+    }
+  }
+
+  // Crea un Blob y lo descarga con URL.createObjectURL (patrón del taller).
+  function downloadFile(filename, content, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // Escapa un valor para CSV (entre comillas si contiene separadores).
+  function csvCell(value) {
+    const text = String(value ?? '');
+    return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  }
+
+  function rowsToCsv(rows, headers) {
+    const lines = rows.map(row =>
+      headers.map(header => csvCell(row[header])).join(',')
+    );
+    return [headers.join(','), ...lines].join('\n');
+  }
+
+  function renderReport(title, lines, rows, headers) {
     const timestamp = new Date().toISOString();
     const report = [
       `========================================`,
       `  REPORTE: ${title}`,
       `  Generado: ${timestamp}`,
+      `  Registros: ${rows.length}`,
       `========================================`,
       ``,
       ...lines,
@@ -443,14 +488,18 @@ function initReports() {
     ].join('\n');
 
     currentReportData = report;
+    currentRows = { rows, headers };
     previewEl.textContent = report;
     downloadBtn.classList.remove('hidden');
     printBtn.classList.remove('hidden');
+    if (exportCsvBtn) exportCsvBtn.classList.remove('hidden');
   }
 
   genUsersBtn.addEventListener('click', async () => {
+    const start = performance.now();
     try {
-      const response = await fetch(`${API}/users?_limit=5`);
+      const limit = selectedLimit();
+      const response = await fetch(`${API}/users?_limit=${limit}`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const users = await response.json();
 
@@ -466,15 +515,27 @@ function initReports() {
         ``
       ].join('\n')).join('');
 
-      renderReport('Reporte de Usuarios', lines.split('\n'));
+      const rows = users.map(u => ({
+        nombre: u.name,
+        username: u.username,
+        email: u.email,
+        telefono: u.phone,
+        empresa: u.company.name,
+        ciudad: u.address.city,
+        website: u.website
+      }));
+      renderReport('Reporte de Usuarios', lines.split('\n'), rows, ['nombre', 'username', 'email', 'telefono', 'empresa', 'ciudad', 'website']);
+      showElapsed(start);
     } catch (error) {
       previewEl.innerHTML = `<p class="text-red-400">Error al generar reporte: ${sanitizeHTML(error.message)}</p>`;
     }
   });
 
   genPostsBtn.addEventListener('click', async () => {
+    const start = performance.now();
     try {
-      const response = await fetch(`${API}/posts?_limit=10`);
+      const limit = selectedLimit();
+      const response = await fetch(`${API}/posts?_limit=${limit}`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const posts = await response.json();
 
@@ -486,17 +547,26 @@ function initReports() {
         ``
       ].join('\n')).join('');
 
-      renderReport('Reporte de Posts', lines.split('\n'));
+      const rows = posts.map(p => ({
+        id: p.id,
+        titulo: p.title,
+        contenido: p.body,
+        autorId: p.userId
+      }));
+      renderReport('Reporte de Posts', lines.split('\n'), rows, ['id', 'titulo', 'contenido', 'autorId']);
+      showElapsed(start);
     } catch (error) {
       previewEl.innerHTML = `<p class="text-red-400">Error al generar reporte: ${sanitizeHTML(error.message)}</p>`;
     }
   });
 
   genCombinedBtn.addEventListener('click', async () => {
+    const start = performance.now();
     try {
+      const limit = selectedLimit();
       const [usersRes, postsRes] = await Promise.all([
-        fetch(`${API}/users?_limit=5`),
-        fetch(`${API}/posts?_limit=5`)
+        fetch(`${API}/users?_limit=${limit}`),
+        fetch(`${API}/posts?_limit=${limit}`)
       ]);
       if (!usersRes.ok || !postsRes.ok) throw new Error('Error al obtener datos');
 
@@ -518,7 +588,10 @@ function initReports() {
         `  Posts por usuario (promedio): ${(posts.length / users.length).toFixed(1)}`
       ];
 
-      renderReport('Reporte Combinado', lines);
+      const comboRows = users.map(u => ({ tipo: 'usuario', nombre: u.name, email: u.email, detalle: u.company.name }))
+        .concat(posts.map(p => ({ tipo: 'post', nombre: p.title, email: '', detalle: p.body.substring(0, 40) })));
+      renderReport('Reporte Combinado', lines, comboRows, ['tipo', 'nombre', 'email', 'detalle']);
+      showElapsed(start);
     } catch (error) {
       previewEl.innerHTML = `<p class="text-red-400">Error al generar reporte: ${sanitizeHTML(error.message)}</p>`;
     }
@@ -526,20 +599,21 @@ function initReports() {
 
   downloadBtn.addEventListener('click', () => {
     if (!currentReportData) return;
-    const blob = new Blob([currentReportData], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `reporte-${Date.now()}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    downloadFile(`reporte-${Date.now()}.txt`, currentReportData, 'text/plain');
   });
 
   printBtn.addEventListener('click', () => {
     window.print();
   });
+
+  // Exportar a CSV desde las filas estructuradas del ultimo reporte.
+  if (exportCsvBtn) {
+    exportCsvBtn.addEventListener('click', () => {
+      if (!currentRows.rows || !currentRows.headers) return;
+      const csv = rowsToCsv(currentRows.rows, currentRows.headers);
+      downloadFile(`reporte-${Date.now()}.csv`, csv, 'text/csv');
+    });
+  }
 }
 
 // ================================================================
