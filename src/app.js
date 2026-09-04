@@ -202,6 +202,214 @@ function loadAnyResult() {
     });
 }
 
+// ================================================================
+// PROMESA 7: MÁQUINA DE ESTADOS — BUSCADOR DE POSTS POR USUARIO
+// ================================================================
+// UI reactiva guiada por una maquina de estados con 4 estados:
+// IDLE (reposo) → PENDING (buscando) → FULFILLED (exito) / REJECTED (error).
+// Object.freeze impide mutar accidentalmente los estados definidos.
+const UI_STATE = Object.freeze({
+  IDLE: 'IDLE',
+  PENDING: 'PENDING',
+  FULFILLED: 'FULFILLED',
+  REJECTED: 'REJECTED'
+});
+
+function initSearchIfNeeded() {
+  const input = document.getElementById('user-id-input');
+  const button = document.getElementById('search-btn');
+  const statusEl = document.getElementById('search-status');
+  const resultsEl = document.getElementById('search-results');
+  const btnText = document.getElementById('btn-text');
+  const btnSpinner = document.getElementById('btn-spinner');
+
+  if (!input || !button) return; // la seccion de maquina de estados no esta presente
+
+  let state = UI_STATE.IDLE;
+
+  function setUI(nextState, statusMessage) {
+    state = nextState;
+    if (statusEl) {
+      statusEl.classList.remove('hidden');
+      const styles = {
+        [UI_STATE.PENDING]: 'bg-yellow-950/40 border border-yellow-800/60 text-yellow-400',
+        [UI_STATE.FULFILLED]: 'bg-emerald-950/40 border border-emerald-800/60 text-emerald-400',
+        [UI_STATE.REJECTED]: 'bg-red-950/40 border border-red-800/60 text-red-400',
+        [UI_STATE.IDLE]: 'bg-slate-800/50 border border-slate-700 text-slate-400'
+      };
+      statusEl.className = `rounded-lg p-3 text-sm font-medium mb-3 ${styles[nextState]}`;
+      statusEl.textContent = statusMessage;
+    }
+    // Bloquea el boton mientras buscamos (PENDING)
+    const isBusy = nextState === UI_STATE.PENDING;
+    button.disabled = isBusy;
+    btnText.textContent = isBusy ? 'Buscando...' : 'Buscar';
+    btnSpinner.classList.toggle('hidden', !isBusy);
+  }
+
+  function searchPosts() {
+    const userId = Number(input.value);
+    if (!Number.isInteger(userId) || userId < 1 || userId > 10) {
+      setUI(UI_STATE.REJECTED, '⚠ ID inválido. Usa un número entre 1 y 10.');
+      return;
+    }
+
+    setUI(UI_STATE.PENDING, 'Buscando posts del usuario...');
+
+    fetch(`${API}/users/${userId}/posts`)
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then(posts => {
+        if (posts.length === 0) {
+          setUI(UI_STATE.FULFILLED, 'El usuario no tiene posts publicados.');
+        } else {
+          setUI(UI_STATE.FULFILLED, `✔ Se encontraron ${posts.length} posts.`);
+        }
+        resultsEl.innerHTML = posts.map(post => `
+          <div class="bg-slate-800/50 rounded-lg p-3 border border-slate-800">
+            <p class="text-sm font-semibold text-emerald-400">#${post.id} ${sanitizeHTML(post.title)}</p>
+            <p class="text-xs text-slate-400">${sanitizeHTML(post.body.substring(0, 100))}...</p>
+          </div>
+        `).join('');
+      })
+      .catch(error => {
+        setUI(UI_STATE.REJECTED, `✖ Error: ${error.message}`);
+        resultsEl.innerHTML = '';
+      });
+  }
+
+  button.addEventListener('click', searchPosts);
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Enter') searchPosts();
+  });
+}
+
+// ================================================================
+// VIDEOS
+// ================================================================
+// initVideos se implementa en app.js; la seccion HTML ya esta en index.html.
+// Accede a la camara con navigator.mediaDevices.getUserMedia() que devuelve
+// una Promise, captura frames con canvas.toDataURL('image/png') y detiene
+// la transmision deteniendo cada track del stream (mediaStream.getTracks()).
+function initVideos() {
+  const video = document.getElementById('video-preview');
+  const startBtn = document.getElementById('start-camera');
+  const stopBtn = document.getElementById('stop-camera');
+  const captureBtn = document.getElementById('capture-photo');
+  const canvas = document.getElementById('photo-canvas');
+  const photoStatus = document.getElementById('photo-status');
+  const info = document.getElementById('video-info');
+
+  if (!video || !startBtn) return;
+
+  let stream = null;
+
+  async function startCamera() {
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Tu navegador no soporta acceso a cámara');
+      }
+      stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: false });
+      video.srcObject = stream;
+      startBtn.classList.add('hidden');
+      stopBtn.classList.remove('hidden');
+      captureBtn.classList.remove('hidden');
+      photoStatus.textContent = 'Cámara activa. Haz clic en "Capturar foto".';
+      const track = stream.getVideoTracks()[0];
+      const settings = track.getSettings();
+      info.innerHTML = `
+        <p>Resolución: ${settings.width}×${settings.height}</p>
+        <p>Velocidad: ${(settings.frameRate || 0).toFixed(0)} fps</p>`;
+    } catch (error) {
+      photoStatus.innerHTML = `<p class="text-red-400">Error al iniciar cámara: ${sanitizeHTML(error.message)}</p>`;
+    }
+  }
+
+  function stopCamera() {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      stream = null;
+    }
+    video.srcObject = null;
+    startBtn.classList.remove('hidden');
+    stopBtn.classList.add('hidden');
+    captureBtn.classList.add('hidden');
+    photoStatus.textContent = 'Cámara detenida.';
+  }
+
+  function capturePhoto() {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    canvas.classList.remove('hidden');
+    photoStatus.innerHTML = `
+      <p class="text-emerald-400 mb-2">✔ Foto capturada</p>
+      <img src="${canvas.toDataURL('image/png')}" class="rounded-lg border border-slate-700" alt="Foto capturada">`;
+  }
+
+  startBtn.addEventListener('click', startCamera);
+  stopBtn.addEventListener('click', stopCamera);
+  captureBtn.addEventListener('click', capturePhoto);
+}
+
+// ================================================================
+// PROMESA 8 (TALLER PARTE 3.2): USUARIO + TODOS — timeout con race
+// ================================================================
+// Obtiene un usuario y sus todos, los combina y muestra un resumen.
+// Implementa un timeout de 3 segundos usando Promise.race() de forma que
+// si la API tarda mas, se muestra un aviso de tiempo agotado.
+function loadUserWithTodos() {
+  const input = document.getElementById('utd-user-id');
+  const button = document.getElementById('utd-load-btn');
+  const resultsEl = document.getElementById('utd-result');
+
+  if (!input || !button || !resultsEl) return;
+
+  button.addEventListener('click', async () => {
+    const userId = Number(input.value) || 1;
+    resultsEl.innerHTML = '<p class="text-slate-500">Cargando usuario y sus tareas...</p>';
+
+    const apiPromise = Promise.all([
+      fetch(`${API}/users/${userId}`).then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); }),
+      fetch(`${API}/users/${userId}/todos`).then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
+    ]);
+
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('⏱ Tiempo agotado (3s). La API no respondió a tiempo.')), 3000)
+    );
+
+    try {
+      const [user, todos] = await Promise.race([apiPromise, timeout]);
+      const completed = todos.filter(t => t.completed).length;
+      const pending = todos.length - completed;
+      resultsEl.innerHTML = `
+        <div class="bg-slate-900 rounded-xl p-4 border border-slate-800">
+          <h3 class="font-bold text-white mb-1">${sanitizeHTML(user.name)}</h3>
+          <p class="text-slate-500 text-sm mb-3">${sanitizeHTML(user.email)}</p>
+          <div class="grid grid-cols-3 gap-3 text-center">
+            <div class="bg-emerald-500/10 rounded-lg p-3">
+              <p class="text-2xl font-bold text-emerald-400">${completed}</p>
+              <p class="text-xs text-slate-400">Completadas</p>
+            </div>
+            <div class="bg-yellow-500/10 rounded-lg p-3">
+              <p class="text-2xl font-bold text-yellow-400">${pending}</p>
+              <p class="text-xs text-slate-400">Pendientes</p>
+            </div>
+            <div class="bg-slate-700/20 rounded-lg p-3">
+              <p class="text-2xl font-bold text-white">${todos.length}</p>
+              <p class="text-xs text-slate-400">Total</p>
+            </div>
+          </div>
+        </div>`;
+    } catch (error) {
+      resultsEl.innerHTML = `<p class="text-red-400">${sanitizeHTML(error.message)}</p>`;
+    }
+  });
+}
+
 
 // ================================================================
 // REPORTES
@@ -515,6 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initReports();
   initGeolocation();
   initSearchIfNeeded();
+  loadUserWithTodos();
 
   handleRoute();
 });
