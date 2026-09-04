@@ -163,6 +163,45 @@ function loadRaceResult() {
     });
 }
 
+// ================================================================
+// PROMESA 6: PROMISE.ANY — EL PRIMER ÉXITO IMPORTA
+// ================================================================
+// Promise.any([.]) espera la PRIMERA promesa que se cumpla (fulfilled).
+// Solo rechaza si TODAS fallan (error AggregateError). Aqui intentamos
+// 3 endpoints y nos quedamos con el primero que responda con exito.
+function loadAnyResult() {
+  const container = document.getElementById('any-result');
+  if (!container) return;
+
+  showLoading('any-result', 'Buscando el primer éxito...');
+
+  const attempts = [
+    fetch(`${API}/posts/1`),
+    fetch(`${API}/posts/2`),
+    fetch(`${API}/posts/3`)
+  ].map(promise => promise.then(response => {
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  }));
+
+  Promise.any(attempts)
+    .then(post => {
+      container.innerHTML = `
+        <span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded mb-2 inline-block">🥇 Primer éxito</span>
+        <h3 class="text-lg font-bold text-emerald-400 mb-1">Post #${post.id}: ${sanitizeHTML(post.title)}</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">${sanitizeHTML(post.body)}</p>`;
+    })
+    .catch(error => {
+      // Promise.any rechaza con AggregateError si TODAS fallan.
+      container.innerHTML = `
+        <p class="text-red-400">Todas las opciones fallaron.</p>
+        <p class="text-red-500/70 text-sm mt-1">${sanitizeHTML(error.message)}</p>`;
+    })
+    .finally(() => {
+      console.log('[Paso 6] Búsqueda del primer éxito finalizada.');
+    });
+}
+
 
 // ================================================================
 // REPORTES
