@@ -375,5 +375,84 @@ Promise.allSettled(requests).then(results => {
 ```
 
 > **Autor:** rama `jose` (josuel-munendez). Arrastrado a `develop` y `main` en la integración GitFlow.
+# 🟢 SOLUCIONES PARTES 3–6 (autor: rama `manrique` — ManriBOT)
+
+> Las partes 1–2 son resueltas por la rama `jose`; aquí se responden las
+> partes 3 a 6 (Promesas avanzadas, cámara/geolocalización, máquina de
+> estados/reportes y el desafío final). Cada funcionalidad está implementada
+> en `src/app.js` e `index.html`.
+
+## ✅ PARTE 3: PROMESAS AVANZADAS — Solución
+
+### Pregunta 3.1 — Tabla comparativa de métodos
+
+| Método | Comportamiento | ¿Cuándo se usa? | Ejemplo del código |
+|--------|----------------|------------------|--------------------|
+| `Promise.all()` | Espera a que **todas** se cumplan; si una rechaza, todo rechaza (todo-o-nada) | Cuando se necesitan varios datos y cualquiera es imprescindible | `loadCombinedData()` (post + autor + comentarios) |
+| `Promise.allSettled()` | Espera a que **todas** lleguen a un estado final (cumplidas o fallidas); **nunca rechaza** | Cuando se quiere revisar cada resultado por separado sin que un fallo detenga el resto | `loadSinglePost()`/`loadSettledPosts()` |
+| `Promise.race()` | Resuelve/rechaza con la **primera** que llegue a un estado final | Timeouts o "la primera respuesta cuenta", gane o pierda | `loadRaceResult()` (API vs temporizador 2 s) |
+| `Promise.any()` | Resuelve con la **primera que se cumpla**; solo rechaza si todas fallan | Cuando basta el primer éxito | `loadAnyResult()` (3 endpoints) |
+
+### Pregunta 3.2 — `loadUserWithTodos()` (implementada ✅)
+
+Función que obtiene un usuario y sus todos, los combina y muestra un resumen con timeout de 3 s mediante `Promise.race()`:
+
+```javascript
+const apiPromise = Promise.all([
+  fetch(`${API}/users/${userId}`).then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
+  fetch(`${API}/users/${userId}/todos`).then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+]);
+const timeout = new Promise((_, reject) =>
+  setTimeout(() => reject(new Error('⏱ Tiempo agotado (3s).')), 3000)
+);
+const [user, todos] = await Promise.race([apiPromise, timeout]);
+```
+
+Renderiza tarjetas con **nombre, email, completadas, pendientes y total**. El widget está en la sección de Máquina de Estados (`#utd-user-id`, `#utd-load-btn`, `#utd-result`).
+
+## ✅ PARTE 4: CÁMARA Y GEOLOCALIZACIÓN — Solución
+
+### Pregunta 4.1 — Código de la cámara (`initVideos`)
+
+1. **¿Qué API se usa?** `navigator.mediaDevices.getUserMedia()` que devuelve una Promise con el stream.
+2. **¿Cómo se manejan los errores de permisos?** Con `try/catch`: si `getUserMedia` no existe o el permiso se deniega, se muestra un mensaje en `#photo-status`.
+3. **¿Qué hace `canvas.toDataURL('image/png')`?** Convierte lo dibujado en el canvas a una cadena en formato PNG (data URL), que puede usarse como `src` de una imagen o descargarse.
+4. **¿Cómo se detiene la transmisión?** Con `stream.getTracks().forEach(track => track.stop())` y luego `video.srcObject = null`.
+
+### Pregunta 4.2 — Geolocalización (`initGeolocation`)
+
+1. **¿Qué método se usa?** `navigator.geolocation.getCurrentPosition(success, error, options)`.
+2. **URL correcta de la API de mapa:**
+   ```javascript
+   const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${longitude - 0.01},${latitude - 0.01},${longitude + 0.01},${latitude + 0.01}&layer=mapnik&marker=${latitude},${longitude}`;
+   ```
+3. **Opciones de configuración:** `{ enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }`.
+4. **Cómo se manejan los códigos de error:** en el callback de error se usa `switch (error.code)` para `PERMISSION_DENIED`, `POSITION_UNAVAILABLE` y `TIMEOUT`, mostrando un mensaje específico en `#geo-error`.
+
+## ✅ PARTE 5: MÁQUINA DE ESTADOS Y REPORTES — Solución
+
+### Pregunta 5.1 — Máquina de estados del buscador (`initSearchIfNeeded`)
+
+1. **¿Por qué se usa `Object.freeze()`?** Para que el objeto de estados sea inmutable y no se pueda modificar accidentalmente en tiempo de ejecución (protege contra errores de tipeo que mutarían las constantes).
+2. **Comportamiento de la UI por estado:**
+   - **IDLE**: reposo, botón "Buscar" habilitado, sin mensaje de estado.
+   - **PENDING**: mientras se busca, el botón se **deshabilita** y muestra "Buscando...", con spinner y mensaje amarillo.
+   - **FULFILLED**: éxito; mensaje verde con la cantidad de posts y se renderizan los resultados.
+   - **REJECTED**: error o ID inválido; mensaje rojo y se limpia la lista de resultados.
+
+### Pregunta 5.2 — Sistema de reportes mejorado (implementado ✅)
+
+Se agregó a la sección de Reportes:
+1. **Boton "Exportar a CSV"** (`#export-csv`): genera un `.csv` desde las filas estructuradas del último reporte con `new Blob()` + `URL.createObjectURL()`.
+2. **Selector de cantidad de registros** (`#report-limit` con 5, 10, 15, 20) usado como `?_limit` en cada petición.
+3. **Contador de tiempo de generación** (`#report-time`) que mide con `performance.now()` los milisegundos que tarda cada generador.
+
+## ✅ PARTE 6: DESAFÍO FINAL / DASHBOARD (bonus, implementado ✅)
+
+`loadDashboardData()` + `initDashboard()`:
+- **Métricas con `Promise.all()`**: total de usuarios, posts, comentarios y álbumes.
+- **Visualización**: tarjetas con cada métrica, top 3 usuarios con más posts (con `reduce()` + `sort()`) y un post aleatorio destacado.
+- **Interactividad**: autorefresco cada 30 s con `setInterval`, estados `PENDING/FULFILLED/REJECTED` y manejo elegante de errores.
+- **Código**: sección HTML `#page-dashboard`, función `loadDashboardData()`, entrada en `PAGES` y enlace `#dashboard` (routing SPA).
 
 
