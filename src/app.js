@@ -125,6 +125,46 @@ function loadPageData(page) {
 
 
 // ================================================================
+// PROMESA 5: PROMISE.RACE — CARRERA API vs TEMPORIZADOR
+// ================================================================
+// Promise.race([.]) resuelve/rechaza con la PRIMERA promesa que
+// llegue a un estado final. Aqui competimos la peticion a la API
+// contra un temporizador de 2 segundos: si gana el temporizador,
+// lanzamos un error de timeout para demostrar el rechazo.
+function loadRaceResult() {
+  const container = document.getElementById('race-result');
+  if (!container) return;
+
+  showLoading('race-result', 'Esperando resultado de la carrera...');
+
+  const apiRequest = fetch(`${API}/posts/1`)
+    .then(response => {
+      if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
+      return response.json();
+    });
+
+  // Temporizador de 2 segundos que SIEMPRE rechaza (timeout).
+  const timeout = new Promise((_, reject) => {
+    setTimeout(() => reject(new Error('⏱ ¡Ganó el temporizador! La API tardó más de 2 segundos.')), 2000);
+  });
+
+  Promise.race([apiRequest, timeout])
+    .then(post => {
+      container.innerHTML = `
+        <span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded mb-2 inline-block">✔ Ganó la API</span>
+        <h3 class="text-lg font-bold text-emerald-400 mb-1">${sanitizeHTML(post.title)}</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">${sanitizeHTML(post.body)}</p>`;
+    })
+    .catch(error => {
+      container.innerHTML = `<p class="text-red-400">${sanitizeHTML(error.message)}</p>`;
+    })
+    .finally(() => {
+      console.log('[Paso 5] Carrera finalizada.');
+    });
+}
+
+
+// ================================================================
 // REPORTES
 // ================================================================
 
