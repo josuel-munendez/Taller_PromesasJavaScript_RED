@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    text-size-adjust: 100%;
+  }
+}
+
+#map-container {
+  height: 480px;
+}

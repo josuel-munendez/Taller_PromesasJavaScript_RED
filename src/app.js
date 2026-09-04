@@ -800,6 +800,9 @@ function initReports() {
 
   if (!genUsersBtn) return;
 
+  // Separador visual entre registros del reporte.
+  const SEPARATOR = '-'.repeat(72);
+
   // Filas actuales en forma estructurada (para exportar a CSV).
   let currentRows = [];
 
@@ -873,17 +876,20 @@ function initReports() {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const users = await response.json();
 
-      const lines = users.map((u, i) => [
-        `Usuario #${i + 1}:`,
-        `  Nombre:     ${u.name}`,
-        `  Username:   ${u.username}`,
-        `  Email:      ${u.email}`,
-        `  Telefono:   ${u.phone}`,
-        `  Empresa:    ${u.company.name}`,
-        `  Ciudad:     ${u.address.city}`,
-        `  Website:    ${u.website}`,
-        ``
-      ].join('\n')).join('');
+      const lines = users.map((u, i) => {
+        const block = [
+          `  ▸ Usuario #${i + 1}`,
+          `  Nombre:     ${u.name}`,
+          `  Username:   ${u.username}`,
+          `  Email:      ${u.email}`,
+          `  Telefono:   ${u.phone}`,
+          `  Empresa:    ${u.company.name}`,
+          `  Ciudad:     ${u.address.city}`,
+          `  Website:    ${u.website}`
+        ];
+        if (i < users.length - 1) block.push(``, SEPARATOR, ``);
+        return block.join('\n');
+      }).join('\n');
 
       const rows = users.map(u => ({
         nombre: u.name,
@@ -909,13 +915,16 @@ function initReports() {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const posts = await response.json();
 
-      const lines = posts.map(p => [
-        `Post #${p.id}:`,
-        `  Titulo: ${p.title}`,
-        `  Body: ${p.body.substring(0, 80)}...`,
-        `  Autor ID: ${p.userId}`,
-        ``
-      ].join('\n')).join('');
+      const lines = posts.map((p, i) => {
+        const block = [
+          `  ▸ Post #${p.id}`,
+          `  Titulo: ${p.title}`,
+          `  Body: ${p.body.substring(0, 80)}...`,
+          `  Autor ID: ${p.userId}`
+        ];
+        if (i < posts.length - 1) block.push(``, SEPARATOR, ``);
+        return block.join('\n');
+      }).join('\n');
 
       const rows = posts.map(p => ({
         id: p.id,
@@ -944,15 +953,34 @@ function initReports() {
       const posts = await postsRes.json();
 
       const lines = [
-        `=== COMBINADO ===`,
+        `  === COMBINADO ===`,
         ``,
-        `--- Usuarios (${users.length}) ---`,
-        ...users.map(u => `  ${u.name} (${u.username}) - ${u.email}`),
+        `  --- Usuarios (${users.length}) ---`,
         ``,
-        `--- Posts (${posts.length}) ---`,
-        ...posts.map(p => `  Post #${p.id}: "${p.title.substring(0, 50)}..." (Usuario ${p.userId})`),
+        ...users.map((u, i) => {
+          const block = [
+            `  ▸ ${u.name} (${u.username})`,
+            `    Email: ${u.email}`,
+            `    Empresa: ${u.company.name}`,
+            `    Ciudad: ${u.address.city}`
+          ];
+          if (i < users.length - 1) block.push('', SEPARATOR, '');
+          return block.join('\n');
+        }),
         ``,
-        `--- Resumen ---`,
+        `  === Posts (${posts.length}) ===`,
+        ``,
+        ...posts.map((p, i) => {
+          const block = [
+            `  ▸ Post #${p.id} — "${p.title.substring(0, 50)}..."`,
+            `    Autor ID: ${p.userId}`,
+            `    Cuerpo: ${p.body.substring(0, 60)}...`
+          ];
+          if (i < posts.length - 1) block.push('', SEPARATOR, '');
+          return block.join('\n');
+        }),
+        ``,
+        `  --- Resumen ---`,
         `  Total usuarios: ${users.length}`,
         `  Total posts: ${posts.length}`,
         `  Posts por usuario (promedio): ${(posts.length / users.length).toFixed(1)}`
