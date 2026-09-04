@@ -8,17 +8,27 @@ Imagina que le pides una pizza a una aplicación. Tú haces el pedido y no te qu
 
 Durante este taller aprenderás:
 
-* Promesa básica  
-* Promesa con listas  
-* Promise.all()  
-* Promise.allSettled()  
-* Promise.race()  
-* Promise.any()  
-* Máquina de estados  
-* async y await  
-* Uso de cámara  
-* Generación de reportes  
-* Geolocalización
+- Promesa básica
+
+- Promesa con listas
+
+- Promise.all()
+
+- Promise.allSettled()
+
+- Promise.race()
+
+- Promise.any()
+
+- Máquina de estados
+
+- async y await
+
+- Uso de cámara
+
+- Generación de reportes
+
+- Geolocalización
 
 # **TALLER 1 — MI PRIMERA PROMESA**
 
@@ -30,37 +40,41 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Crear una función llamada loadSinglePost.
+1. Crear una función llamada loadSinglePost.
 
-2\. Mostrar un mensaje de “Cargando...”.
+2. Mostrar un mensaje de “Cargando...”.
 
-3\. Utilizar fetch() para pedir el post número 1\.
+3. Utilizar fetch() para pedir el post número 1.
 
-4\. Esperar la respuesta.
+4. Esperar la respuesta.
 
-5\. Comprobar si la respuesta fue correcta.
+5. Comprobar si la respuesta fue correcta.
 
-6\. Convertir la respuesta para trabajar con los datos.
+6. Convertir la respuesta para trabajar con los datos.
 
-7\. Buscar en la página el lugar donde mostrarás el post.
+7. Buscar en la página el lugar donde mostrarás el post.
 
-8\. Mostrar título, contenido, ID e ID del autor.
+8. Mostrar título, contenido, ID e ID del autor.
 
-9\. Si ocurre un error, mostrar un mensaje.
+9. Si ocurre un error, mostrar un mensaje.
 
-10\. Finalmente, informar en consola que la operación terminó.
+10. Finalmente, informar en consola que la operación terminó.
 
 ## **🧩 Preguntas**
 
-* ¿Qué pasa mientras esperamos la respuesta?  
-* ¿Qué significa que una Promesa esté pendiente?  
-* ¿Qué sucede si Internet no responde?  
-* ¿Para qué sirve .catch()?  
-* ¿Para qué sirve .finally()?
+- ¿Qué pasa mientras esperamos la respuesta?
+
+- ¿Qué significa que una Promesa esté pendiente?
+
+- ¿Qué sucede si Internet no responde?
+
+- ¿Para qué sirve .catch()?
+
+- ¿Para qué sirve .finally()?
 
 ## **⭐ Reto**
 
-Cambia el número del post y prueba con 1, 2, 3 y 10\.
+Cambia el número del post y prueba con 1, 2, 3 y 10.
 
 # **TALLER 2 — UNA PROMESA CON UNA LISTA**
 
@@ -72,30 +86,31 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Crear loadUsersList.
+1. Crear loadUsersList.
 
-2\. Mostrar “Cargando usuarios...”.
+2. Mostrar “Cargando usuarios...”.
 
-3\. Realizar la petición.
+3. Realizar la petición.
 
-4\. Esperar la respuesta.
+4. Esperar la respuesta.
 
-5\. Convertir los datos.
+5. Convertir los datos.
 
-6\. Recibir la lista.
+6. Recibir la lista.
 
-7\. Recorrer la lista.
+7. Recorrer la lista.
 
-8\. Mostrar nombre, usuario, correo y empresa.
+8. Mostrar nombre, usuario, correo y empresa.
 
-9\. Manejar errores.
+9. Manejar errores.
 
-10\. Informar al finalizar.
+10. Informar al finalizar.
 
 ## **🧩 Preguntas**
 
-* ¿Necesitas una función diferente para cada usuario?  
-* ¿Por qué podemos recorrer una lista?
+- ¿Necesitas una función diferente para cada usuario?
+
+- ¿Por qué podemos recorrer una lista?
 
 ## **⭐ Reto**
 
@@ -111,24 +126,25 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Crear la petición del post.
+1. Crear la petición del post.
 
-2\. Crear la petición del autor.
+2. Crear la petición del autor.
 
-3\. Crear la petición de comentarios.
+3. Crear la petición de comentarios.
 
-4\. Guardar las tres Promesas.
+4. Guardar las tres Promesas.
 
-5\. Colocarlas dentro de Promise.all().
+5. Colocarlas dentro de Promise.all().
 
-6\. Esperar los tres resultados.
+6. Esperar los tres resultados.
 
-7\. Mostrar título, autor y comentarios.
+7. Mostrar título, autor y comentarios.
 
 ## **🧩 Preguntas**
 
-* ¿Qué pasa si una de las tres operaciones falla?  
-* ¿Por qué es útil trabajar al mismo tiempo?
+- ¿Qué pasa si una de las tres operaciones falla?
+
+- ¿Por qué es útil trabajar al mismo tiempo?
 
 ## **⭐ Reto**
 
@@ -144,28 +160,29 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Crear una lista de IDs.
+1. Crear una lista de IDs.
 
-2\. Incluir IDs correctos y uno incorrecto.
+2. Incluir IDs correctos y uno incorrecto.
 
-3\. Crear una Promesa para cada ID.
+3. Crear una Promesa para cada ID.
 
-4\. Utilizar Promise.allSettled().
+4. Utilizar Promise.allSettled().
 
-5\. Esperar todos los resultados.
+5. Esperar todos los resultados.
 
-6\. Revisar cada resultado.
+6. Revisar cada resultado.
 
-7\. Identificar fulfilled como éxito.
+7. Identificar fulfilled como éxito.
 
-8\. Identificar rejected como fallo.
+8. Identificar rejected como fallo.
 
-9\. Mostrar ambos resultados.
+9. Mostrar ambos resultados.
 
 ## **🧩 Preguntas**
 
-* ¿Cuál es la diferencia entre fulfilled y rejected?  
-* ¿Qué ventaja tiene revisar cada resultado?
+- ¿Cuál es la diferencia entre fulfilled y rejected?
+
+- ¿Qué ventaja tiene revisar cada resultado?
 
 ## **⭐ Reto**
 
@@ -181,24 +198,25 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Crear una petición a la API.
+1. Crear una petición a la API.
 
-2\. Crear una Promesa que espere 2 segundos.
+2. Crear una Promesa que espere 2 segundos.
 
-3\. Hacer que el temporizador produzca un error al terminar.
+3. Hacer que el temporizador produzca un error al terminar.
 
-4\. Colocar ambas en Promise.race().
+4. Colocar ambas en Promise.race().
 
-5\. Esperar al ganador.
+5. Esperar al ganador.
 
-6\. Mostrar el post si gana la API.
+6. Mostrar el post si gana la API.
 
-7\. Mostrar un aviso si gana el temporizador.
+7. Mostrar un aviso si gana el temporizador.
 
 ## **🧩 Preguntas**
 
-* ¿Qué significa “gana la API”?  
-* ¿Qué significa “gana el timeout”?
+- ¿Qué significa “gana la API”?
+
+- ¿Qué significa “gana el timeout”?
 
 ## **⭐ Reto**
 
@@ -214,20 +232,21 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Crear tres peticiones.
+1. Crear tres peticiones.
 
-2\. Colocarlas dentro de Promise.any().
+2. Colocarlas dentro de Promise.any().
 
-3\. Esperar un resultado exitoso.
+3. Esperar un resultado exitoso.
 
-4\. Mostrar el post conseguido.
+4. Mostrar el post conseguido.
 
-5\. Si todas fallan, mostrar un mensaje de error.
+5. Si todas fallan, mostrar un mensaje de error.
 
 ## **🧩 Preguntas**
 
-* ¿Qué diferencia hay entre Promise.race() y Promise.any()?  
-* ¿Qué ocurre si todas las opciones fallan?
+- ¿Qué diferencia hay entre Promise.race() y Promise.any()?
+
+- ¿Qué ocurre si todas las opciones fallan?
 
 ## **⭐ Reto**
 
@@ -243,25 +262,27 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Identificar IDLE: no hacemos nada.
+1. Identificar IDLE: no hacemos nada.
 
-2\. Identificar PENDING: estamos buscando.
+2. Identificar PENDING: estamos buscando.
 
-3\. Identificar FULFILLED: encontramos la información.
+3. Identificar FULFILLED: encontramos la información.
 
-4\. Identificar REJECTED: ocurrió un error.
+4. Identificar REJECTED: ocurrió un error.
 
-5\. Crear un buscador de posts por usuario.
+5. Crear un buscador de posts por usuario.
 
-6\. Desactivar el botón mientras busca.
+6. Desactivar el botón mientras busca.
 
-7\. Mostrar el resultado o el error.
+7. Mostrar el resultado o el error.
 
 ## **🧩 Preguntas**
 
-* ¿Qué estado aparece mientras esperamos?  
-* ¿Qué estado aparece cuando todo sale bien?  
-* ¿Qué estado aparece cuando hay un error?
+- ¿Qué estado aparece mientras esperamos?
+
+- ¿Qué estado aparece cuando todo sale bien?
+
+- ¿Qué estado aparece cuando hay un error?
 
 ## **⭐ Reto**
 
@@ -277,31 +298,33 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Crear una función asíncrona.
+1. Crear una función asíncrona.
 
-2\. Recibir el ID del usuario.
+2. Recibir el ID del usuario.
 
-3\. Verificar que el ID sea válido.
+3. Verificar que el ID sea válido.
 
-4\. Realizar la petición.
+4. Realizar la petición.
 
-5\. Usar await.
+5. Usar await.
 
-6\. Esperar la respuesta.
+6. Esperar la respuesta.
 
-7\. Convertir los datos.
+7. Convertir los datos.
 
-8\. Mostrar los posts.
+8. Mostrar los posts.
 
-9\. Usar try para intentar la operación.
+9. Usar try para intentar la operación.
 
-10\. Usar catch para capturar errores.
+10. Usar catch para capturar errores.
 
 ## **🧩 Preguntas**
 
-* ¿Qué significa async?  
-* ¿Qué significa await?  
-* ¿Qué ventaja tiene try/catch?
+- ¿Qué significa async?
+
+- ¿Qué significa await?
+
+- ¿Qué ventaja tiene try/catch?
 
 ## **⭐ Reto**
 
@@ -317,31 +340,33 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Crear botón Iniciar cámara.
+1. Crear botón Iniciar cámara.
 
-2\. Crear botón Detener cámara.
+2. Crear botón Detener cámara.
 
-3\. Crear botón Tomar foto.
+3. Crear botón Tomar foto.
 
-4\. Comprobar si el navegador permite utilizar la cámara.
+4. Comprobar si el navegador permite utilizar la cámara.
 
-5\. Solicitar permiso.
+5. Solicitar permiso.
 
-6\. Mostrar la cámara.
+6. Mostrar la cámara.
 
-7\. Obtener información de la cámara.
+7. Obtener información de la cámara.
 
-8\. Tomar una fotografía.
+8. Tomar una fotografía.
 
-9\. Mostrarla en un canvas.
+9. Mostrarla en un canvas.
 
-10\. Detener la cámara al terminar.
+10. Detener la cámara al terminar.
 
 ## **🧩 Preguntas**
 
-* ¿Por qué el navegador pide permiso?  
-* ¿Qué ocurre si elegimos No permitir?  
-* ¿Por qué debemos apagar la cámara?
+- ¿Por qué el navegador pide permiso?
+
+- ¿Qué ocurre si elegimos No permitir?
+
+- ¿Por qué debemos apagar la cámara?
 
 ## **⭐ Reto**
 
@@ -357,26 +382,27 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Crear botón para usuarios.
+1. Crear botón para usuarios.
 
-2\. Consultar usuarios.
+2. Consultar usuarios.
 
-3\. Crear un texto organizado.
+3. Crear un texto organizado.
 
-4\. Mostrar el reporte.
+4. Mostrar el reporte.
 
-5\. Crear botón para descargar.
+5. Crear botón para descargar.
 
-6\. Crear botón para imprimir.
+6. Crear botón para imprimir.
 
-7\. Repetir el proceso con posts.
+7. Repetir el proceso con posts.
 
-8\. Crear un reporte combinado.
+8. Crear un reporte combinado.
 
 ## **🧩 Preguntas**
 
-* ¿Qué información debería tener un reporte?  
-* ¿Para qué sirve la fecha de generación?
+- ¿Qué información debería tener un reporte?
+
+- ¿Para qué sirve la fecha de generación?
 
 ## **⭐ Reto**
 
@@ -392,30 +418,31 @@ Completar la actividad siguiendo los pasos y comprender qué ocurre en cada uno.
 
 ## **👣 Paso a paso**
 
-1\. Crear botón Obtener ubicación.
+1. Crear botón Obtener ubicación.
 
-2\. Comprobar si el navegador permite geolocalización.
+2. Comprobar si el navegador permite geolocalización.
 
-3\. Solicitar permiso.
+3. Solicitar permiso.
 
-4\. Esperar la respuesta.
+4. Esperar la respuesta.
 
-5\. Obtener latitud.
+5. Obtener latitud.
 
-6\. Obtener longitud.
+6. Obtener longitud.
 
-7\. Obtener precisión.
+7. Obtener precisión.
 
-8\. Mostrar los datos.
+8. Mostrar los datos.
 
-9\. Mostrar la ubicación en un mapa.
+9. Mostrar la ubicación en un mapa.
 
-10\. Manejar los errores.
+10. Manejar los errores.
 
 ## **🧩 Preguntas**
 
-* ¿Por qué se necesita permiso?  
-* ¿Por qué la ubicación es información privada?
+- ¿Por qué se necesita permiso?
+
+- ¿Por qué la ubicación es información privada?
 
 ## **⭐ Reto**
 
@@ -425,21 +452,30 @@ Explica por qué nunca debes compartir tu ubicación con desconocidos.
 
 Construye una pequeña aplicación que reúna todo lo aprendido.
 
-* Módulo 1 — Un post: mostrar un post individual.  
-* Módulo 2 — Usuarios: mostrar cinco usuarios.  
-* Módulo 3 — Información combinada: Post \+ Autor \+ Comentarios usando Promise.all().  
-* Módulo 4 — Detective de errores: consultar varios posts usando Promise.allSettled().  
-* Módulo 5 — Carrera: comprobar quién termina primero usando Promise.race().  
-* Módulo 6 — Primer ganador: obtener el primer resultado exitoso usando Promise.any().  
-* Módulo 7 — Buscador: buscar posts por usuario usando async/await.  
-* Módulo 8 — Cámara: encender cámara y tomar una fotografía.  
-* Módulo 9 — Reportes: generar y descargar información.  
-* Módulo 10 — Mi ubicación: mostrar la ubicación del dispositivo.
+- Módulo 1 — Un post: mostrar un post individual.
+
+- Módulo 2 — Usuarios: mostrar cinco usuarios.
+
+- Módulo 3 — Información combinada: Post + Autor + Comentarios usando Promise.all().
+
+- Módulo 4 — Detective de errores: consultar varios posts usando Promise.allSettled().
+
+- Módulo 5 — Carrera: comprobar quién termina primero usando Promise.race().
+
+- Módulo 6 — Primer ganador: obtener el primer resultado exitoso usando Promise.any().
+
+- Módulo 7 — Buscador: buscar posts por usuario usando async/await.
+
+- Módulo 8 — Cámara: encender cámara y tomar una fotografía.
+
+- Módulo 9 — Reportes: generar y descargar información.
+
+- Módulo 10 — Mi ubicación: mostrar la ubicación del dispositivo.
 
 # **🧠 TABLA PARA RECORDAR**
 
 | Herramienta | Explicación para niños |
-| :---- | :---- |
+| - | - |
 | Promise | Una promesa de que llegará una respuesta |
 | .then() | Cuando termine, haz esto |
 | .catch() | Si algo sale mal, haz esto |
@@ -456,6 +492,7 @@ Construye una pequeña aplicación que reúna todo lo aprendido.
 | getUserMedia() | Pedir acceso a cámara o micrófono |
 | Geolocalización | Obtener la ubicación del dispositivo |
 
+
 # **🎮 FORMA DE EVALUACIÓN**
 
 ⭐ 1 punto: realizó la actividad.
@@ -470,20 +507,23 @@ Construye una pequeña aplicación que reúna todo lo aprendido.
 
 Total: 5 puntos por taller.
 
----
 
-# 🟢 SOLUCIONES DEL TALLER (11 años)
+# 🟢 SOLUCIONES DEL TALLER
 
-> Respuestas a las preguntas y retos de cada taller, referenciando su implementación en `app.js`/`index.html`.
-> Autor por bloque: talleres 1-4 → rama `jose`; talleres 5-11 → rama `manrique`.
+> Respuestas a las preguntas y retos de cada taller, referenciando su implementación en `app.js`/`index.html`. Autor por bloque: talleres 1-4 → rama `jose`; talleres 5-11 → rama `manrique`.
 
 ## 🟢 TALLER 1 — MI PRIMERA PROMESA (implementado en `loadSinglePost`)
 
 **Preguntas**
+
 - **¿Qué pasa mientras esperamos la respuesta?** El programa no se queda bloqueado. Podemos seguir haciendo otras cosas; es la "magia" de las Promesas.
+
 - **¿Qué significa que una Promesa esté pendiente?** `pending` (pendiente) significa que todavía no ha terminado: la petición está en camino y aún no sabemos si salió bien o mal.
+
 - **¿Qué sucede si Internet no responde?** La Promesa pasa a `rejected` (rechazada) y se ejecuta `.catch()`.
+
 - **¿Para qué sirve `.catch()`?** Para el "plan B": captura el error y nos permite mostrar un mensaje amigable en lugar de que la app falle.
+
 - **¿Para qué sirve `.finally()`?** Se ejecuta siempre, haya éxito o error (por ejemplo, para avisar que la operación terminó).
 
 **Reto** (IDs 1, 2, 3 y 10): en la SPA el taller pidió modificar la petición para probar distintos IDs. En la versión final se adoptó el requisito del TALLER PRÁCTICO de cargar 3 posts (1, 3 y 5).
@@ -491,15 +531,19 @@ Total: 5 puntos por taller.
 ## 🟢 TALLER 2 — UNA PROMESA CON UNA LISTA (implementado en `loadUsersList`)
 
 **Preguntas**
-- **¿Necesitas una función diferente para cada usuario?** No. La API devuelve un **array** y lo recorremos con `.map()`, creando la tarjeta de cada usuario dentro del mismo recorrido. Una sola función sirve para todos.
-- **¿Por qué podemos recorrer una lista?** Porque es un arreglo (`[]`) y los arreglos tienen el método `.map()` que ejecuta algo por cada elemento y devuelve un nuevo arreglo.
 
-**Reto** (3, 5 y 10 usuarios): se puede usar el parámetro `?_limit=N` en la URL (`${API}/users?_limit=5`) para devolver solo N usuarios.
+- **¿Necesitas una función diferente para cada usuario?** No. La API devuelve un **array** y lo recorremos con `.map()`, creando la tarjeta de cada usuario dentro del mismo recorrido. Una sola función sirve para todos.
+
+- **¿Por qué podemos recorrer una lista?** Porque es un arreglo (`\[\]`) y los arreglos tienen el método `.map()` que ejecuta algo por cada elemento y devuelve un nuevo arreglo.
+
+**Reto** (3, 5 y 10 usuarios): se puede usar el parámetro `?\_limit=N` en la URL (`$\{API\}/users?\_limit=5`) para devolver solo N usuarios.
 
 ## 🟢 TALLER 3 — Promise.all() (implementado en `loadCombinedData`)
 
 **Preguntas**
+
 - **¿Qué pasa si una de las tres operaciones falla?** Todo falla. `Promise.all()` es "todo o nada": si una promesa se rechaza, el `Promise.all` completo se rechaza y salta al `.catch()`.
+
 - **¿Por qué es útil trabajar al mismo tiempo?** Las 3 peticiones van en paralelo, así que el tiempo total es el de la más lenta (¡no se suman los 3 tiempos!). Esto hace la app más rápida.
 
 **Reto** (dirección incorrecta): al poner una URL inválida, esa petición se rechaza y `Promise.all()` rechaza todo → se muestra el error "todo o nada" en la sección.
@@ -507,64 +551,83 @@ Total: 5 puntos por taller.
 ## 🟢 TALLER 4 — Promise.allSettled() (implementado en `loadSettledPosts`)
 
 **Preguntas**
+
 - **¿Cuál es la diferencia entre fulfilled y rejected?** `fulfilled` = la promesa se cumplió (éxito, hay datos). `rejected` = falló (error). `allSettled()` nos entrega un arreglo donde cada elemento dice su propio estado.
+
 - **¿Qué ventaja tiene revisar cada resultado?** Aunque una petición falle, las demás siguen funcionando y podemos ver **todas** (las buenas y las malas) sin que un error detenga el resto.
 
 **Reto** (3 correctos + 2 incorrectos): se cumple en la sección `promise-allsettled`, que muestra tarjetas "✔ cargo" y "✖ fallo" por cada post.
 
 > **Autor:** rama `jose` (josuel-munendez). Talleres 5-11 resueltos en la rama `manrique` (ManriBOT).
+
 # 🟢 SOLUCIONES TALLERES 5–11 (autor: rama `manrique` — ManriBOT)
 
-> Talleres 1-4 resueltos por la rama `jose`. Aquí se resuelven los talleres
-> 5 a 11, referenciando su implementación en `src/app.js` e `index.html`.
+> Talleres 1-4 resueltos por la rama `jose`. Aquí se resuelven los talleres 5 a 11, referenciando su implementación en `src/app.js` e `index.html`.
 
 ## 🟣 TALLER 5 — Promise.race() (implementado en `loadRaceResult`)
+
 **Preguntas**
+
 - **¿Qué significa "gana la API"?** La petición `fetch()` resuelve antes que el temporizador; se muestra el post.
-- **¿Qué significa "gana el timeout"?** El temporizador de 2 s termina primero y hace `reject`, por lo que se muestra el aviso de tiempo agotado.
-**Reto** (1, 3 y 5 segundos): basta cambiar el `2000` de `setTimeout` en `loadRaceResult()`.
+
+- **¿Qué significa "gana el timeout"?** El temporizador de 2 s termina primero y hace `reject`, por lo que se muestra el aviso de tiempo agotado. **Reto** (1, 3 y 5 segundos): basta cambiar el `2000` de `setTimeout` en `loadRaceResult()`.
 
 ## 🥇 TALLER 6 — Promise.any() (implementado en `loadAnyResult`)
+
 **Preguntas**
+
 - **¿Qué diferencia hay entre race y any?** `race` resuelve con la **primera** en terminar (aunque falle); `any` resuelve con la **primera que tenga éxito**.
-- **¿Qué ocurre si todas las opciones fallan?** `Promise.any` rechaza con un `AggregateError` y se muestra el mensaje de error.
-**Reto** (1 o 2 peticiones fallan): con endpoints inválidos, `any` elige el que sí responde.
+
+- **¿Qué ocurre si todas las opciones fallan?** `Promise.any` rechaza con un `AggregateError` y se muestra el mensaje de error. **Reto** (1 o 2 peticiones fallan): con endpoints inválidos, `any` elige el que sí responde.
 
 ## 🎛️ TALLER 7 — LA MÁQUINA DE ESTADOS (implementado en `initSearchIfNeeded`)
+
 **Preguntas**
+
 - **¿Qué estado aparece mientras esperamos?** `PENDING`.
+
 - **¿Qué estado aparece cuando todo sale bien?** `FULFILLED`.
-- **¿Qué estado aparece cuando hay un error?** `REJECTED`.
-**Reto** (mensaje por estado): la UI cambia color y texto para cada estado (`#search-status`).
+
+- **¿Qué estado aparece cuando hay un error?** `REJECTED`. **Reto** (mensaje por estado): la UI cambia color y texto para cada estado (`\#search-status`).
 
 ## ⏳ TALLER 8 — async Y await (implementado en `loadUserWithTodos` y reportes)
+
 **Preguntas**
+
 - **¿Qué significa `async`?** Marca una función como asíncrona; siempre devuelve una Promise.
+
 - **¿Qué significa `await`?** Pausa la función hasta que la Promise se resuelva, sin bloquear la página.
-- **¿Qué ventaja tiene `try/catch`?** Permite capturar errores de forma legible y alternativa al `.catch()`.
-**Reto** (contraponer "cuando termine haz esto" vs "espera el resultado"): `.then()` encadena acciones tras terminar; `await` espera el valor directamente.
+
+- **¿Qué ventaja tiene `try/catch`?** Permite capturar errores de forma legible y alternativa al `.catch()`. **Reto** (contraponer "cuando termine haz esto" vs "espera el resultado"): `.then()` encadena acciones tras terminar; `await` espera el valor directamente.
 
 ## 🎥 TALLER 9 — ENCENDER LA CÁMARA (implementado en `initVideos`)
+
 **Preguntas**
+
 - **¿Por qué el navegador pide permiso?** Porque la cámara es un recurso sensible del dispositivo y solo se activa con tu consentimiento.
-- **¿Qué ocurre si elegimos No permitir?** `getUserMedia` rechaza la Promise y se muestra el error en `#photo-status`.
-- **¿Por qué debemos apagar la cámara?** Para no gastar recursos del dispositivo y libertar el sensor y la luz del micrófono.
-**Reto** (la cámara es un recurso privado): captura imágenes de tu entorno sin tu conocimiento, por eso se protege con permiso.
+
+- **¿Qué ocurre si elegimos No permitir?** `getUserMedia` rechaza la Promise y se muestra el error en `\#photo-status`.
+
+- **¿Por qué debemos apagar la cámara?** Para no gastar recursos del dispositivo y libertar el sensor y la luz del micrófono. **Reto** (la cámara es un recurso privado): captura imágenes de tu entorno sin tu conocimiento, por eso se protege con permiso.
 
 ## 📊 TALLER 10 — CREAR UN REPORTE (implementado en `initReports` + CSV)
+
 **Preguntas**
+
 - **¿Qué información debería tener un reporte?** Datos organizados (nombre, correo, etc.), cabecera, y la fecha de generación.
-- **¿Para qué sirve la fecha de generación?** Para saber cuándo se obtuvieron los datos y si siguen vigentes.
-**Reto** (fecha y hora): se incluye `timestamp` en la cabecera del reporte y se añade el tiempo de generación en `#report-time`.
+
+- **¿Para qué sirve la fecha de generación?** Para saber cuándo se obtuvieron los datos y si siguen vigentes. **Reto** (fecha y hora): se incluye `timestamp` en la cabecera del reporte y se añade el tiempo de generación en `\#report-time`.
 
 ## 📍 TALLER 11 — MI UBICACIÓN (implementado en `initGeolocation`)
-**Preguntas**
-- **¿Por qué se necesita permiso?** Porque la ubicación revela dónde estás y es información privada protegida.
-- **¿Por qué la ubicación es información privada?** Porque puede servir para rastrearte o ubicar tu casa/escuela.
-**Reto** (no compartir la ubicación con desconocidos): nunca reveles tu posición a extraños; las apps deben pedirte permiso explícito.
 
----
+**Preguntas**
+
+- **¿Por qué se necesita permiso?** Porque la ubicación revela dónde estás y es información privada protegida.
+
+- **¿Por qué la ubicación es información privada?** Porque puede servir para rastrearte o ubicar tu casa/escuela. **Reto** (no compartir la ubicación con desconocidos): nunca reveles tu posición a extraños; las apps deben pedirte permiso explícito.
+
 
 # 🏆 RETO FINAL — SUPER EXPLORADOR DE APIS
 
 Todos los módulos 1-10 del reto final están implementados y funcionando en la SPA (Módulo 1: `loadSinglePost`; 2: `loadUsersList`; 3: `loadCombinedData`; 4: `loadSettledPosts`; 5: `loadRaceResult`; 6: `loadAnyResult`; 7: buscador `initSearchIfNeeded`; 8: `initVideos`; 9: `initReports`; 10: `initGeolocation`).
+
