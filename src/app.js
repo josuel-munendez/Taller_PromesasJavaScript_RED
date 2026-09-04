@@ -180,6 +180,51 @@ function loadSinglePost() {
     });
 }
 
+// ================================================================
+// PROMESA 2: PROMISE + ARRAY — LISTA DE USUARIOS
+// ================================================================
+// La API devuelve un ARRAY de usuarios. Se usa .map() para transformar
+// cada elemento del arreglo en una tarjeta HTML, demostrando el patron
+// fetch() -> .then() -> .map() para renderizado de colecciones.
+function loadUsersList() {
+  const container = document.getElementById('users-list');
+  if (!container) return;
+
+  showLoading('users-list', 'Cargando usuarios...');
+
+  fetch(`${API}/users`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Error HTTP ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(users => {
+      container.innerHTML = users.map(user => `
+        <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+              ${sanitizeHTML(user.name.charAt(0))}
+            </span>
+            <div>
+              <h4 class="font-bold text-white text-sm">${sanitizeHTML(user.name)}</h4>
+              <p class="text-xs text-slate-500">@${sanitizeHTML(user.username)}</p>
+            </div>
+          </div>
+          <div class="space-y-1 text-xs text-slate-400">
+            <p>✉️ ${sanitizeHTML(user.email)}</p>
+            <p>🏢 ${sanitizeHTML(user.company.name)}</p>
+            <p>📍 ${sanitizeHTML(user.address.city)}</p>
+            <p>🌐 ${sanitizeHTML(user.website)}</p>
+          </div>
+        </div>
+      `).join('');
+    })
+    .catch(error => {
+      showError('users-list', error.message);
+    });
+}
+
 
 // ================================================================
 // REPORTES
