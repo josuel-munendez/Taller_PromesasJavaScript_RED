@@ -469,3 +469,47 @@ Construye una pequeña aplicación que reúna todo lo aprendido.
 ⭐ 1 punto: respondió las preguntas.
 
 Total: 5 puntos por taller.
+
+---
+
+# 🟢 SOLUCIONES DEL TALLER (11 años)
+
+> Respuestas a las preguntas y retos de cada taller, referenciando su implementación en `app.js`/`index.html`.
+> Autor por bloque: talleres 1-4 → rama `jose`; talleres 5-11 → rama `manrique`.
+
+## 🟢 TALLER 1 — MI PRIMERA PROMESA (implementado en `loadSinglePost`)
+
+**Preguntas**
+- **¿Qué pasa mientras esperamos la respuesta?** El programa no se queda bloqueado. Podemos seguir haciendo otras cosas; es la "magia" de las Promesas.
+- **¿Qué significa que una Promesa esté pendiente?** `pending` (pendiente) significa que todavía no ha terminado: la petición está en camino y aún no sabemos si salió bien o mal.
+- **¿Qué sucede si Internet no responde?** La Promesa pasa a `rejected` (rechazada) y se ejecuta `.catch()`.
+- **¿Para qué sirve `.catch()`?** Para el "plan B": captura el error y nos permite mostrar un mensaje amigable en lugar de que la app falle.
+- **¿Para qué sirve `.finally()`?** Se ejecuta siempre, haya éxito o error (por ejemplo, para avisar que la operación terminó).
+
+**Reto** (IDs 1, 2, 3 y 10): en la SPA el taller pidió modificar la petición para probar distintos IDs. En la versión final se adoptó el requisito del TALLER PRÁCTICO de cargar 3 posts (1, 3 y 5).
+
+## 🟢 TALLER 2 — UNA PROMESA CON UNA LISTA (implementado en `loadUsersList`)
+
+**Preguntas**
+- **¿Necesitas una función diferente para cada usuario?** No. La API devuelve un **array** y lo recorremos con `.map()`, creando la tarjeta de cada usuario dentro del mismo recorrido. Una sola función sirve para todos.
+- **¿Por qué podemos recorrer una lista?** Porque es un arreglo (`[]`) y los arreglos tienen el método `.map()` que ejecuta algo por cada elemento y devuelve un nuevo arreglo.
+
+**Reto** (3, 5 y 10 usuarios): se puede usar el parámetro `?_limit=N` en la URL (`${API}/users?_limit=5`) para devolver solo N usuarios.
+
+## 🟢 TALLER 3 — Promise.all() (implementado en `loadCombinedData`)
+
+**Preguntas**
+- **¿Qué pasa si una de las tres operaciones falla?** Todo falla. `Promise.all()` es "todo o nada": si una promesa se rechaza, el `Promise.all` completo se rechaza y salta al `.catch()`.
+- **¿Por qué es útil trabajar al mismo tiempo?** Las 3 peticiones van en paralelo, así que el tiempo total es el de la más lenta (¡no se suman los 3 tiempos!). Esto hace la app más rápida.
+
+**Reto** (dirección incorrecta): al poner una URL inválida, esa petición se rechaza y `Promise.all()` rechaza todo → se muestra el error "todo o nada" en la sección.
+
+## 🟢 TALLER 4 — Promise.allSettled() (implementado en `loadSettledPosts`)
+
+**Preguntas**
+- **¿Cuál es la diferencia entre fulfilled y rejected?** `fulfilled` = la promesa se cumplió (éxito, hay datos). `rejected` = falló (error). `allSettled()` nos entrega un arreglo donde cada elemento dice su propio estado.
+- **¿Qué ventaja tiene revisar cada resultado?** Aunque una petición falle, las demás siguen funcionando y podemos ver **todas** (las buenas y las malas) sin que un error detenga el resto.
+
+**Reto** (3 correctos + 2 incorrectos): se cumple en la sección `promise-allsettled`, que muestra tarjetas "✔ cargo" y "✖ fallo" por cada post.
+
+> **Autor:** rama `jose` (josuel-munendez). Talleres 5-11 resueltos en la rama `manrique` (ManriBOT).
