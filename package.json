@@ -7,13 +7,14 @@
     "build:css": "tailwindcss -i ./src/input.css -o ./src/styles.css --minify",
     "watch:css": "tailwindcss -i ./src/input.css -o ./src/styles.css --watch",
     "dev": "npm run watch:css",
-    "start": "npx serve .",
+    "start": "serve .",
     "build": "npm run build:css",
-    "clean": "rm -f src/styles.css"
+    "clean": "node -e \"require('fs').unlinkSync('src/styles.css')\""
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
+    "serve": "^14.2.6",
     "tailwindcss": "^3.4.4"
   },
   "browserslist": [
