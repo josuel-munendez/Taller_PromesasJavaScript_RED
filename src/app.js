@@ -225,6 +225,61 @@ function loadUsersList() {
     });
 }
 
+// ================================================================
+// PROMESA 3: PROMISE.ALL — POST + AUTOR + COMENTARIOS
+// ================================================================
+// Dispara 3 peticiones en paralelo con Promise.all([fetch, fetch, fetch]).
+// Es ATOMICO: todo o nada. Si cualquiera falla, el .catch() cancela el
+// resultado completo, por eso aqui se valida cada response.
+function loadCombinedData() {
+  const container = document.getElementById('combined-data');
+  if (!container) return;
+
+  showLoading('combined-data', 'Cargando datos combinados...');
+
+  const postId = 1;
+
+  Promise.all([
+    fetch(`${API}/posts/${postId}`),
+    fetch(`${API}/users/${postId}`),
+    fetch(`${API}/posts/${postId}/comments`)
+  ])
+    .then(([postRes, userRes, commentsRes]) => {
+      if (!postRes.ok || !userRes.ok || !commentsRes.ok) {
+        throw new Error('Alguna solicitud fallo (HTTP no 2xx)');
+      }
+      return Promise.all([postRes.json(), userRes.json(), commentsRes.json()]);
+    })
+    .then(([post, author, comments]) => {
+      container.innerHTML = `
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-lg font-bold text-emerald-400 mb-1">${sanitizeHTML(post.title)}</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">${sanitizeHTML(post.body)}</p>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+            <h4 class="text-sm font-bold text-white mb-2">👤 Autor</h4>
+            <p class="text-slate-300 text-sm">${sanitizeHTML(author.name)} — <span class="text-slate-500">@${sanitizeHTML(author.username)}</span></p>
+            <p class="text-slate-500 text-xs mt-1">${sanitizeHTML(author.email)}</p>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-white mb-2">💬 Comentarios (${comments.length})</h4>
+            <div class="space-y-2 max-h-64 overflow-y-auto">
+              ${comments.map(comment => `
+                <div class="bg-slate-800/40 rounded-lg p-3 border border-slate-800">
+                  <p class="text-xs font-semibold text-emerald-400">${sanitizeHTML(comment.name)}</p>
+                  <p class="text-slate-400 text-sm">${sanitizeHTML(comment.body)}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>`;
+    })
+    .catch(error => {
+      showError('combined-data', `Promise.all fallo (todo o nada): ${error.message}`);
+    });
+}
+
 
 // ================================================================
 // REPORTES
