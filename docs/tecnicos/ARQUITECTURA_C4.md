@@ -10,11 +10,11 @@ Muestra el sistema como una caja negra y sus actores/sistemas externos.
 
 ```mermaid
 flowchart LR
-    U[👤 Usuario / Estudiante] -->|navega por hash| SPA["SPA de Promesas\n(Sistema)"]
-    SPA -->|fetch() HTTP| JP[JSONPlaceholder\nAPI REST de pruebas]
-    SPA -->|geolocalización| NAV[API Geo del Navegador]
-    SPA -->|href iframe| OSM[OpenStreetMap\nmapa embebido]
-    SPA -->|getUserMedia()| CAM[📷 Cámara del dispositivo]
+    U["👤 Usuario / Estudiante"] -->|"navega por hash"| SPA["SPA de Promesas\n(Sistema)"]
+    SPA -->|"fetch() HTTP"| JP["JSONPlaceholder\nAPI REST de pruebas"]
+    SPA -->|"geolocalización"| NAV["API Geo del Navegador"]
+    SPA -->|"href iframe"| OSM["OpenStreetMap\nmapa embebido"]
+    SPA -->|"getUserMedia()"| CAM["📷 Cámara del dispositivo"]
 ```
 
 | Elemento | Descripción |
@@ -34,17 +34,17 @@ Muestra los contenedores (piezas ejecutables) que forman el sistema.
 
 ```mermaid
 flowchart TB
-    subgraph Cliente[Navegador Web]
+    subgraph Cliente["Navegador Web"]
         H["📄 index.html\nContenedor: SPA (estático)"]
-        CSS[🎨 styles.css\nTailwind compilado]
-        JS[⚙️ app.js\nLógica de la SPA y Promesas]
+        CSS["🎨 styles.css\nTailwind compilado"]
+        JS["⚙️ app.js\nLógica de la SPA y Promesas"]
     end
     H --> CSS
     H --> JS
-    JS -->|fetch| API[("JSONPlaceholder\nAPI externa")]
-    JS -->|getUserMedia| CAM[(Cámara)]
-    JS -->|geolocation| GEO[(API Geo)]
-    JS -->|iframe| OSM[(OpenStreetMap)]
+    JS -->|"fetch"| API[("JSONPlaceholder\nAPI externa")]
+    JS -->|"getUserMedia"| CAM[("Cámara")]
+    JS -->|"geolocation"| GEO[("API Geo")]
+    JS -->|"iframe"| OSM[("OpenStreetMap")]
 ```
 
 | Contenedor | Tipo | Descripción |
@@ -61,21 +61,21 @@ Detalla los componentes lógicos internos de `app.js`.
 
 ```mermaid
 flowchart TB
-    RT[🛣️ Router SPA\nhandleRoute / showPage]
-    UT[🛠️ Utilidades\nsanitizeHTML · showLoading · showError]
-    PM[⚙️ Gestor de Promesas]
-    PM --> P1[loadSinglePost]
-    PM --> P2[loadUsersList]
-    PM --> P3[loadCombinedData]
-    PM --> P4[loadSettledPosts]
-    PM --> P5[loadRaceResult]
-    PM --> P6[loadAnyResult]
-    PM --> P7[initSearchIfNeeded\nMáquina de estados]
-    SEC[Secciones] --> VID[initVideos]
-    SEC --> REP[initReports]
-    SEC --> GEO[initGeolocation]
-    SEC --> CON[loadContactData]
-    SEC --> DASH[loadDashboardData]
+    RT["🛣️ Router SPA\nhandleRoute / showPage"]
+    UT["🛠️ Utilidades\nsanitizeHTML · showLoading · showError"]
+    PM["⚙️ Gestor de Promesas"]
+    PM --> P1["loadSinglePost"]
+    PM --> P2["loadUsersList"]
+    PM --> P3["loadCombinedData"]
+    PM --> P4["loadSettledPosts"]
+    PM --> P5["loadRaceResult"]
+    PM --> P6["loadAnyResult"]
+    PM --> P7["initSearchIfNeeded\nMáquina de estados"]
+    SEC["Secciones"] --> VID["initVideos"]
+    SEC --> REP["initReports"]
+    SEC --> GEO["initGeolocation"]
+    SEC --> CON["loadContactData"]
+    SEC --> DASH["loadDashboardData"]
     UT --> RT
     RT --> PM
     RT --> SEC

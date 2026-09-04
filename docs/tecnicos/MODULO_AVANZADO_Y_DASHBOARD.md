@@ -94,11 +94,11 @@ Pipeline funcional de los datos:
 
 ```mermaid
 flowchart LR
-    API[fetch API] -->|"?limit=(5/10/15/20)"| JSON[JSON]
-    JSON --> F[filas estructuradas rows/headers]
-    F --> TXT[texto plano para preview]
-    F --> CSV[csvCell + rowsToCsv → Blob .csv]
-    TXT --> DL[Descargar/Imprimir]
+    API["fetch API"] -->|"?limit=(5/10/15/20)"| JSON["JSON"]
+    JSON --> F["filas estructuradas rows/headers"]
+    F --> TXT["texto plano para preview"]
+    F --> CSV["csvCell + rowsToCsv → Blob .csv"]
+    TXT --> DL["Descargar/Imprimir"]
     CSV --> DL
 ```
 
@@ -114,11 +114,11 @@ filas con comas y saltos). El tiempo se mide con `performance.now()`.
 
 ```mermaid
 flowchart LR
-    T[setInterval 30s] --> L[loadDashboardData]
-    L --> PA[Promise.all users/posts/comments/albums]
-    PA --> CARDS[tarjetas de métricas]
-    PA --> TOP[Top 3 usuarios]
-    PA --> FEAT[Post aleatorio destacado]
+    T["setInterval 30s"] --> L["loadDashboardData"]
+    L --> PA["Promise.all users/posts/comments/albums"]
+    PA --> CARDS["tarjetas de métricas"]
+    PA --> TOP["Top 3 usuarios"]
+    PA --> FEAT["Post aleatorio destacado"]
 ```
 
 ---
